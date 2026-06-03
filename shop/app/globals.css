@@ -1,0 +1,138 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-playfair: 'Playfair Display', Georgia, serif;
+  --font-inter: 'Inter', system-ui, sans-serif;
+}
+
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    @apply bg-purple-950 text-purple-100;
+    font-family: var(--font-inter);
+    background-image:
+      radial-gradient(ellipse at 20% 0%, rgba(147,51,234,0.15) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 100%, rgba(107,33,168,0.10) 0%, transparent 60%);
+    min-height: 100vh;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-playfair);
+  }
+}
+
+@layer components {
+  /* ── Satin card ── */
+  .card-satin {
+    @apply relative overflow-hidden rounded-2xl;
+    background: linear-gradient(135deg,
+      rgba(107,33,168,0.40) 0%,
+      rgba(74,0,128,0.55) 50%,
+      rgba(59,7,100,0.60) 100%);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(212,175,55,0.18);
+    box-shadow: 0 8px 32px rgba(74,0,128,0.30), inset 0 1px 0 rgba(255,255,255,0.06);
+  }
+  .card-satin::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  /* ── Luxury button ── */
+  .btn-luxury {
+    @apply relative inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-medium text-sm tracking-wide transition-all duration-300 overflow-hidden;
+    background: linear-gradient(135deg, #6b21a8 0%, #9333ea 50%, #7e22ce 100%);
+    color: #fff;
+    border: 1px solid rgba(212,175,55,0.30);
+    box-shadow: 0 4px 16px rgba(147,51,234,0.35);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  }
+  .btn-luxury::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.08) 50%, transparent 100%);
+    transform: translateX(-100%);
+    transition: transform 0.5s ease;
+  }
+  .btn-luxury:hover::before { transform: translateX(100%); }
+  .btn-luxury:hover {
+    box-shadow: 0 6px 24px rgba(147,51,234,0.50);
+    transform: translateY(-1px);
+  }
+  .btn-luxury:active { transform: translateY(0); }
+
+  /* ── Gold button ── */
+  .btn-gold {
+    @apply relative inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-medium text-sm tracking-wide transition-all duration-300;
+    background: linear-gradient(135deg, #b8962d 0%, #d4af37 40%, #fbbf24 60%, #d4af37 80%, #b8962d 100%);
+    background-size: 200%;
+    color: #1a0030;
+    border: none;
+    box-shadow: 0 4px 16px rgba(212,175,55,0.35);
+    font-weight: 600;
+  }
+  .btn-gold:hover {
+    background-position: right;
+    box-shadow: 0 6px 24px rgba(212,175,55,0.50);
+    transform: translateY(-1px);
+  }
+
+  /* ── Input ── */
+  .input-luxury {
+    @apply w-full rounded-xl px-4 py-3 text-sm outline-none transition-all duration-200;
+    background: rgba(59,7,100,0.50);
+    border: 1px solid rgba(147,51,234,0.30);
+    color: #f3e8ff;
+  }
+  .input-luxury::placeholder { color: rgba(216,180,254,0.50); }
+  .input-luxury:focus {
+    border-color: rgba(212,175,55,0.60);
+    box-shadow: 0 0 0 3px rgba(212,175,55,0.12);
+  }
+
+  /* ── Badge ── */
+  .badge-luxury {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+    background: linear-gradient(135deg, rgba(212,175,55,0.2), rgba(212,175,55,0.1));
+    border: 1px solid rgba(212,175,55,0.40);
+    color: #fbbf24;
+  }
+
+  /* ── Section divider ── */
+  .divider-gold {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(212,175,55,0.4), transparent);
+  }
+
+  /* ── Product card hover ── */
+  .product-card {
+    @apply card-satin cursor-pointer transition-all duration-300;
+  }
+  .product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 48px rgba(74,0,128,0.40), 0 0 0 1px rgba(212,175,55,0.25);
+  }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: rgba(59,7,100,0.3); }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(147,51,234,0.5);
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(147,51,234,0.8); }
+}

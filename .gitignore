@@ -1,0 +1,8 @@
+node_modules/
+.next/
+.env
+.env.local
+*.log
+dist/
+shop/data/products.json
+shop/public/images/products/
