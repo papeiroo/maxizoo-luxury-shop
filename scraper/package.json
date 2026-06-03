@@ -1,20 +1,18 @@
 {
   "name": "maxizoo-scraper",
-  "version": "1.0.0",
-  "description": "Scraper produktów z maxizoo.pl — pobiera kategorie, produkty, warianty, atrybuty, zdjęcia i opcje wysyłki",
+  "version": "3.0.0",
+  "description": "Maxizoo.pl full product scraper v3 - all categories, images, attributes, 10% margin",
   "main": "scraper.js",
   "scripts": {
     "scrape": "node scraper.js",
     "scrape:test": "node scraper.js --test",
-    "download-images": "node download-images.js"
+    "scrape:pies": "node scraper.js --cat pies",
+    "scrape:koty": "node scraper.js --cat koty"
   },
   "dependencies": {
-    "puppeteer": "^21.0.0",
-    "cheerio": "^1.0.0",
     "axios": "^1.6.0",
+    "cheerio": "^1.0.0-rc.12",
     "fs-extra": "^11.2.0",
-    "slugify": "^1.6.6",
-    "p-limit": "^3.1.0",
-    "cli-progress": "^3.12.0"
+    "p-limit": "^3.1.0"
   }
 }

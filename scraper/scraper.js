@@ -1,392 +1,659 @@
 /**
- * MaxiZoo.pl Scraper
- * Senior-grade scraper: pobiera kategorie, produkty, warianty, atrybuty,
- * zdjęcia, opcje wysyłki. Zapisuje wynik do ../shop/data/products.json
+ * ╔═══════════════════════════════════════════════════════════════════╗
+ * ║  MaxiZoo.pl Scraper v3  —  Kompletny                             ║
+ * ║  • Wszystkie kategorie + podkategorie (rekurencyjnie)            ║
+ * ║  • Pełne opisy, wszystkie zdjęcia, atrybuty, warianty            ║
+ * ║  • Klasy wysyłki (wagowe)                                        ║
+ * ║  • Automatyczna marża +10% na każdym produkcie                   ║
+ * ╚═══════════════════════════════════════════════════════════════════╝
  *
- * Użycie:
- *   node scraper.js          — pełny scraping
- *   node scraper.js --test   — tylko 5 produktów testowo
+ * Uruchomienie:
+ *   node scraper.js              — pełny scraping
+ *   node scraper.js --test       — 5 produktów / kategorię (demo)
+ *   node scraper.js --cat pies   — tylko jedna gałąź kategorii
  */
 
-const puppeteer = require('puppeteer');
+'use strict';
+
+const axios   = require('axios');
 const cheerio = require('cheerio');
-const axios = require('axios');
-const fs = require('fs-extra');
-const path = require('path');
-const slugify = require('slugify');
-const pLimit = require('p-limit');
-const { MultiBar, Presets } = require('cli-progress');
+const fs      = require('fs-extra');
+const path    = require('path');
+const pLimit  = require('p-limit');
 
-const BASE_URL = 'https://www.maxizoo.pl';
-const OUTPUT_DIR = path.join(__dirname, '..', 'shop', 'data');
-const IMAGES_DIR = path.join(__dirname, '..', 'shop', 'public', 'images', 'products');
-const IS_TEST = process.argv.includes('--test');
-const CONCURRENCY = 3;
+// ─── Konfiguracja ────────────────────────────────────────────────────
+const BASE         = 'https://www.maxizoo.pl';
+const MARGIN       = 0.10;                    // +10% marża
+const IS_TEST      = process.argv.includes('--test');
+const CAT_FILTER   = (() => { const i = process.argv.indexOf('--cat'); return i > -1 ? process.argv[i+1] : null; })();
+const MAX_PER_CAT  = IS_TEST ? 5 : Infinity;
+const REQ_DELAY    = () => new Promise(r => setTimeout(r, 800 + Math.random() * 700));
 
-// Delay helper
-const delay = (ms) => new Promise(r => setTimeout(r, ms));
+const OUT_DIR    = path.join(__dirname, '..', 'shop', 'data');
+const IMG_DIR    = path.join(__dirname, '..', 'shop', 'public', 'images', 'products');
 
-// Slug helper
-const makeSlug = (text) =>
-  slugify(text, { lower: true, strict: true, locale: 'pl' });
+// ─── Klasy wysyłki (wagowe) ──────────────────────────────────────────
+const SHIPPING_CLASSES = [
+  {
+    id:        'free',
+    name:      'Darmowa wysyłka',
+    condition: 'Zamówienie od 149 zł',
+    methods: [
+      { carrier: 'InPost Kurier',   price: 0,     time: '1-2 dni robocze' },
+      { carrier: 'InPost Paczkomat', price: 0,    time: '1-2 dni robocze' },
+    ],
+  },
+  {
+    id:        'standard',
+    name:      'Wysyłka standardowa',
+    condition: 'Zamówienie poniżej 149 zł',
+    methods: [
+      { carrier: 'InPost Kurier',    price: 12.99, time: '1-2 dni robocze' },
+      { carrier: 'InPost Paczkomat', price: 9.99,  time: '1-2 dni robocze' },
+      { carrier: 'DHL Kurier',       price: 14.99, time: '1-2 dni robocze' },
+      { carrier: 'Płatność przy odbiorze (DHL)', price: 18.99, time: '2-3 dni robocze' },
+    ],
+  },
+  {
+    id:        'heavy',
+    name:      'Wysyłka ponadgabarytowa',
+    condition: 'Zamówienie powyżej 31 kg',
+    surcharge: 15.00,
+    methods: [
+      { carrier: 'InPost Kurier (2 paczki)', price: 27.98, time: '1-2 dni robocze' },
+      { carrier: 'DHL Kurier (2 paczki)',    price: 29.98, time: '2-3 dni robocze' },
+    ],
+  },
+  {
+    id:        'click_collect',
+    name:      'Odbiór w sklepie (Click & Collect)',
+    condition: 'Zawsze dostępne',
+    methods: [
+      { carrier: 'Odbiór osobisty w sklepie Maxi Zoo', price: 0, time: 'Tego samego dnia' },
+    ],
+  },
+];
 
-// ─── 1. Pobierz kategorie ────────────────────────────────────────────────────
-async function scrapeCategories(page) {
-  console.log('\n📂 Pobieranie kategorii...');
-  await page.goto(BASE_URL, { waitUntil: 'networkidle2', timeout: 30000 });
-  await delay(1500);
+// ─── HTTP klient ──────────────────────────────────────────────────────
+const http = axios.create({
+  baseURL: BASE,
+  timeout: 25000,
+  headers: {
+    'User-Agent':      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+    'Accept':          'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+    'Accept-Language': 'pl-PL,pl;q=0.9,en;q=0.5',
+    'Accept-Encoding': 'gzip, deflate, br',
+    'Cache-Control':   'no-cache',
+    'Connection':      'keep-alive',
+  },
+});
 
-  const html = await page.content();
-  const $ = cheerio.load(html);
-  const categories = [];
-
-  // Nawigacja główna — selector dostosuj do aktualnej struktury strony
-  $('nav a[href*="/c/"], .main-navigation a[href*="/c/"], .nav-main a').each((_, el) => {
-    const href = $(el).attr('href') || '';
-    const name = $(el).text().trim();
-    if (!name || categories.find(c => c.href === href)) return;
-    if (href.startsWith('/') || href.startsWith(BASE_URL)) {
-      categories.push({
-        id: makeSlug(name),
-        name,
-        slug: makeSlug(name),
-        href: href.startsWith('http') ? href : `${BASE_URL}${href}`,
-        subcategories: [],
-      });
+const getHtml = async (url) => {
+  try {
+    const res = await http.get(url);
+    return cheerio.load(res.data);
+  } catch (e) {
+    if (e.response?.status === 404) return null;
+    if (e.response?.status === 429) { // rate limit
+      await new Promise(r => setTimeout(r, 5000));
+      return getHtml(url);
     }
+    return null;
+  }
+};
+
+// ─── 1. Odkryj wszystkie kategorie i podkategorie ─────────────────────
+async function discoverAllCategories() {
+  console.log('🗂️  Odkrywanie kategorii i podkategorii...');
+  const $ = await getHtml('/');
+  if (!$) return [];
+
+  const categories = [];
+  const seen = new Set();
+
+  // Zbierz wszystkie linki /c/... z nawigacji
+  $('a[href]').each((_, el) => {
+    const href = $(el).attr('href') || '';
+    const text = $(el).text().trim();
+    if (!href.match(/^\/c\/[a-z0-9-/]+\/?$/)) return;
+    if (href === '/c/' || text.length < 2 || text.length > 80) return;
+    if (seen.has(href)) return;
+    seen.add(href);
+
+    const parts = href.replace(/^\/c\//, '').replace(/\/$/, '').split('/');
+    const depth  = parts.length;
+    const parent = depth > 1 ? '/c/' + parts.slice(0, -1).join('/') + '/' : null;
+
+    categories.push({
+      id:     href.replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g,''),
+      name:   text,
+      slug:   parts[parts.length - 1],
+      path:   href,
+      url:    BASE + href,
+      depth,
+      parent,
+    });
   });
 
-  // Fallback — popularne kategorie zoologiczne
-  if (categories.length === 0) {
-    const fallback = [
-      { name: 'Psy', path: '/c/psy' },
-      { name: 'Koty', path: '/c/koty' },
-      { name: 'Ptaki', path: '/c/ptaki' },
-      { name: 'Gryzonie', path: '/c/gryzonie' },
-      { name: 'Ryby', path: '/c/ryby-i-akwarium' },
-      { name: 'Gady', path: '/c/gady-i-terrarium' },
-    ];
-    fallback.forEach(f => categories.push({
-      id: makeSlug(f.name),
-      name: f.name,
-      slug: makeSlug(f.name),
-      href: `${BASE_URL}${f.path}`,
-      subcategories: [],
-    }));
-  }
+  // Fallback: główne kategorie jeśli nawigacja nie oddała subcats
+  const mainCats = [
+    { name: 'Pies',           path: '/c/pies/' },
+    { name: 'Kot',            path: '/c/kot/' },
+    { name: 'Małe zwierzęta', path: '/c/male-zwierzeta/' },
+    { name: 'Ptaki',          path: '/c/ptaki/' },
+    { name: 'Akwarystyka',    path: '/c/akwarystyka/' },
+    { name: 'Terrarystyka',   path: '/c/terrarystyka/' },
+    { name: 'Ogród i staw',   path: '/c/ogrod-i-staw/' },
+    { name: 'VET',            path: '/c/diety-vet/' },
+  ];
 
-  console.log(`  ✅ Znaleziono ${categories.length} kategorii`);
-  return categories;
-}
-
-// ─── 2. Pobierz URLe produktów z kategorii ──────────────────────────────────
-async function scrapeProductUrls(page, categoryUrl, maxProducts = Infinity) {
-  const urls = new Set();
-  let pageNum = 1;
-
-  while (true) {
-    const url = pageNum === 1 ? categoryUrl : `${categoryUrl}?page=${pageNum}`;
-    try {
-      await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
-      await delay(1000);
-    } catch {
-      break;
+  for (const mc of mainCats) {
+    if (!seen.has(mc.path)) {
+      categories.push({ id: mc.path.replace(/[^a-z0-9-]/g,'-'), name: mc.name,
+        slug: mc.path.split('/').filter(Boolean).pop(), path: mc.path,
+        url: BASE + mc.path, depth: 1, parent: null });
+      seen.add(mc.path);
     }
 
-    const html = await page.content();
-    const $ = cheerio.load(html);
+    // Pobierz podkategorie z każdej kategorii głównej
+    const $cat = await getHtml(mc.path);
+    if ($cat) {
+      $cat('a[href]').each((_, el) => {
+        const href = $cat(el).attr('href') || '';
+        const text = $cat(el).text().trim();
+        if (!href.match(/^\/c\/[a-z0-9-/]+\/?$/) || seen.has(href)) return;
+        if (text.length < 2 || text.length > 80) return;
+        seen.add(href);
+        const parts = href.replace(/^\/c\//, '').replace(/\/$/, '').split('/');
+        categories.push({
+          id: href.replace(/[^a-z0-9-]/g,'-').replace(/-+/g,'-').replace(/^-|-$/g,''),
+          name: text, slug: parts[parts.length-1],
+          path: href, url: BASE+href,
+          depth: parts.length,
+          parent: parts.length > 1 ? '/c/'+parts.slice(0,-1).join('/')+'/': null,
+        });
+      });
+      await REQ_DELAY();
+    }
+  }
 
-    const prevSize = urls.size;
-    // Różne selektory — strona może mieć różną strukturę
-    $('a[href*="/p/"], .product-tile a, .product-item a, article.product a').each((_, el) => {
+  // Filtruj duplikaty i sortuj: najpierw najgłębsze (liściowe)
+  const unique = [...new Map(categories.map(c => [c.path, c])).values()]
+    .sort((a, b) => b.depth - a.depth);
+
+  console.log(`  ✅ Odkryto ${unique.length} kategorii/podkategorii\n`);
+  return unique;
+}
+
+// ─── 2. Pobierz URLe produktów z kategorii ────────────────────────────
+async function getProductUrls(catPath, max) {
+  const urls = new Set();
+  let page = 1;
+
+  while (urls.size < max) {
+    const url = page === 1 ? catPath : `${catPath}?page=${page}`;
+    const $ = await getHtml(url);
+    if (!$) break;
+
+    const before = urls.size;
+    $('a[href]').each((_, el) => {
       const href = $(el).attr('href') || '';
-      if (href.includes('/p/') || href.match(/\/[a-z0-9-]+-\d+$/)) {
-        const full = href.startsWith('http') ? href : `${BASE_URL}${href}`;
+      if (href.match(/\/p\/[a-z0-9%-]+-\d{6,}\/?/)) {
+        const full = (href.startsWith('http') ? href : BASE + href)
+          .split('?')[0].replace(/([^/])$/, '$1/');
         urls.add(full);
       }
     });
 
-    if (urls.size === prevSize || urls.size >= maxProducts) break;
-    pageNum++;
-    if (pageNum > 50) break; // zabezpieczenie
+    if (urls.size === before) break;
+    if (urls.size >= max) break;
+    page++;
+    await REQ_DELAY();
+    if (page > 200) break;
   }
 
-  return [...urls].slice(0, maxProducts);
+  return [...urls].slice(0, max);
 }
 
-// ─── 3. Scrape pojedynczy produkt ───────────────────────────────────────────
-async function scrapeProduct(page, url, categoryName) {
-  try {
-    await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
-    await delay(800);
-  } catch {
-    return null;
+// ─── 3. Pobierz szczegóły produktu ────────────────────────────────────
+async function scrapeProduct(url, categoryName, categoryPath) {
+  const $ = await getHtml(url);
+  if (!$) return null;
+
+  // ── Nazwa ──
+  const name = $('h1').first().text().trim();
+  if (!name || name.length < 3) return null;
+
+  // ── SKU ──
+  const sku = url.match(/-(\d{5,})\/?$/)?.[1] ||
+    $('*').filter((_, el) => /Nr art\./i.test($(el).text())).first()
+      .text().match(/Nr art\.\:\s*(\d+)/i)?.[1] || Date.now().toString();
+
+  // ── Marka ──
+  const brand = $('a[href*="/c/marki/"]').first().text()
+    .replace(/sucha karma|mokra karma|karma|zabawki|akcesoria/gi, '').trim();
+
+  // ── Cena bazowa ──
+  let rawPrice = 0;
+  // Szukamy pierwszego "X,XX zł" w contencie produktu (nie nawigacja)
+  const pricePatterns = $('*').toArray();
+  for (const el of pricePatterns) {
+    const t = $(el).clone().children().remove().end().text().trim();
+    if (/^\d{1,4}[,.]\d{2}\s*zł$/.test(t)) {
+      rawPrice = parseFloat(t.replace(/[^\d,]/g,'').replace(',','.'));
+      break;
+    }
+  }
+  // Fallback — regex po całym HTML
+  if (!rawPrice) {
+    const match = $.html().match(/"price"\s*:\s*"?(\d+[.,]\d+)"?/);
+    if (match) rawPrice = parseFloat(match[1].replace(',','.'));
   }
 
-  const html = await page.content();
-  const $ = cheerio.load(html);
+  // ── Marża +10% ──
+  const basePrice  = rawPrice;
+  const finalPrice = rawPrice > 0 ? Math.ceil(rawPrice * (1 + MARGIN) * 100) / 100 : 0;
 
-  // ── Podstawowe dane ──
-  const name =
-    $('h1.product-name, h1[itemprop="name"], h1').first().text().trim() ||
-    $('title').text().split('|')[0].trim();
+  // ── Cena jednostkowa (per kg itp.) ──
+  const unitPriceMatch = $.html().match(/\((\d+[.,]\d+)\s*zł\/\w+\)/);
+  const unitPrice = unitPriceMatch
+    ? Math.ceil(parseFloat(unitPriceMatch[1].replace(',','.')) * (1 + MARGIN) * 100) / 100
+    : null;
 
-  const priceRaw =
-    $('[itemprop="price"]').attr('content') ||
-    $('.price-final, .product-price, [class*="price"]').first().text().replace(/[^0-9,.]/g, '').replace(',', '.');
-  const price = parseFloat(priceRaw) || 0;
-
-  const originalPriceRaw = $('.price-old, .price-before, [class*="original"]').first()
-    .text().replace(/[^0-9,.]/g, '').replace(',', '.');
-  const originalPrice = parseFloat(originalPriceRaw) || null;
-
-  const brand =
-    $('[itemprop="brand"]').text().trim() ||
-    $('.product-brand, .brand-name').first().text().trim() || '';
-
-  const sku =
-    $('[itemprop="sku"]').text().trim() ||
-    $('.product-sku, [class*="sku"]').first().text().trim() ||
-    url.split('/').pop().split('?')[0];
-
-  // ── Opis ──
-  const description =
-    $('[itemprop="description"], .product-description, .description-text').first().html() ||
-    $('.product-details').first().html() || '';
-
-  // ── Zdjęcia ──
+  // ── Zdjęcia — z CDN fressnapf ──
   const images = [];
-  $('img[src*="/product/"], img[src*="produkty"], .product-image img, [class*="gallery"] img, [class*="slider"] img').each((_, el) => {
-    let src = $(el).attr('src') || $(el).attr('data-src') || $(el).attr('data-lazy') || '';
-    if (!src) return;
-    if (!src.startsWith('http')) src = `${BASE_URL}${src}`;
-    // Zamień na największą wersję
-    src = src.replace(/_\d+x\d+\./, '_800x800.').replace(/\?.*$/, '');
-    if (!images.includes(src)) images.push(src);
+  const imgSeen = new Set();
+  // Thumbnails i główne zdjęcia
+  $('a[href*="fressnapf.com/products"], img[src*="fressnapf.com/products"]').each((_, el) => {
+    const src = $(el).attr('href') || $(el).attr('src') || '';
+    if (src && !imgSeen.has(src)) { imgSeen.add(src); images.push(src); }
   });
-
-  // ── Atrybuty / specyfikacja ──
-  const attributes = {};
-  $('.product-attributes tr, .product-specs tr, table.attributes tr').each((_, row) => {
-    const cells = $(row).find('td, th');
-    if (cells.length >= 2) {
-      const key = $(cells[0]).text().trim();
-      const val = $(cells[1]).text().trim();
-      if (key) attributes[key] = val;
-    }
+  // Data-src (lazy)
+  $('[data-src*="fressnapf.com"]').each((_, el) => {
+    const src = $(el).attr('data-src') || '';
+    if (src && !imgSeen.has(src)) { imgSeen.add(src); images.push(src); }
   });
-  // DL/DT/DD format
-  $('dl.attributes, dl.specs').each((_, dl) => {
-    $(dl).find('dt').each((i, dt) => {
-      const dd = $(dl).find('dd').eq(i);
-      attributes[$(dt).text().trim()] = dd.text().trim();
+  // Szukaj w atrybucie srcset
+  $('img[srcset*="fressnapf.com"]').each((_, el) => {
+    const srcset = $(el).attr('srcset') || '';
+    srcset.split(',').forEach(part => {
+      const s = part.trim().split(' ')[0];
+      if (s.includes('fressnapf.com') && !imgSeen.has(s)) { imgSeen.add(s); images.push(s); }
     });
   });
+  // Szukaj w JSON-LD lub script tags
+  $('script').each((_, el) => {
+    const content = $(el).html() || '';
+    const matches = content.matchAll(/https:\/\/media\.os\.fressnapf\.com\/products[^"'\s,)]+/g);
+    for (const m of matches) {
+      if (!imgSeen.has(m[0])) { imgSeen.add(m[0]); images.push(m[0]); }
+    }
+  });
 
-  // ── Warianty (rozmiary, smaki, itp.) ──
-  const variants = [];
-  // Select/options
-  $('select[name*="variant"], select[name*="size"], select[id*="variant"]').each((_, select) => {
-    const variantName = $(select).attr('name') || $(select).attr('id') || 'variant';
-    $(select).find('option').each((_, opt) => {
-      const text = $(opt).text().trim();
-      const val = $(opt).attr('value') || '';
-      const price = $(opt).attr('data-price') || '';
-      if (text && val && val !== '' && val !== '0') {
-        variants.push({ group: variantName, label: text, value: val, price: parseFloat(price) || null });
+  // ── Opis krótki (bullet points) ──
+  const shortDesc = [];
+  $('h1').first().nextAll('ul').first().find('li').each((_, li) => {
+    const t = $(li).text().trim();
+    if (t) shortDesc.push(t);
+  });
+  // Fallback
+  if (shortDesc.length === 0) {
+    $('ul li').each((_, li) => {
+      const t = $(li).text().trim();
+      if (t.length > 30 && t.length < 350 && !/nawigacja|koszyk|menu|Pies|Kot|Promocje|Poradnik/i.test(t)) {
+        shortDesc.push(t);
+      }
+    });
+  }
+
+  // ── Opis długi ──
+  let longDesc = '';
+  // Szukaj sekcji "Informacje o produkcie"
+  $('h2, h3').each((_, heading) => {
+    const text = $(heading).text().trim();
+    if (/informacje o produkcie|opis/i.test(text)) {
+      let content = '';
+      $(heading).nextAll('p, ul, div').slice(0, 5).each((_, el) => {
+        const t = $(el).text().trim();
+        if (t.length > 30 && !/newsletter|regulamin|polityka/i.test(t)) {
+          content += t + '\n\n';
+        }
+      });
+      if (content.length > 100) { longDesc = content.trim(); return false; }
+    }
+  });
+  // Fallback: pierwsze długie paragrafy
+  if (!longDesc) {
+    $('p').each((_, el) => {
+      const t = $(el).text().trim();
+      if (t.length > 100 && !/newsletter|polityka prywatności|koszty przesyłki|zapisz się/i.test(t)) {
+        longDesc += t + '\n\n';
+        if (longDesc.length > 1000) return false;
+      }
+    });
+    longDesc = longDesc.trim();
+  }
+
+  // ── Składniki analityczne ──
+  let ingredients = '';
+  $('h2, h3, strong').each((_, el) => {
+    const t = $(el).text().trim();
+    if (/składniki analityczne|skład:/i.test(t)) {
+      ingredients = $(el).nextAll().first().text().trim().slice(0, 800) ||
+        $(el).parent().text().replace(t, '').trim().slice(0, 800);
+      return false;
+    }
+  });
+  // Fallback z tekstu strony
+  if (!ingredients) {
+    const bodyText = $('body').text();
+    const m = bodyText.match(/Składniki analityczne[:\s]*([\s\S]{50,500}?)(?:Skład:|##|Zalecenia)/);
+    if (m) ingredients = m[1].trim();
+  }
+
+  // ── Tabele atrybutów ──
+  const attributes = {};
+
+  // Tabela składu / zaleceń karmienia
+  $('table').each((_, table) => {
+    const caption = $(table).find('caption').text().trim() ||
+      $(table).prev('h2, h3, strong').text().trim();
+
+    $(table).find('tr').each((_, row) => {
+      const cells = $(row).find('td, th');
+      if (cells.length >= 2) {
+        const key = $(cells[0]).text().trim().replace(/\*\*/g, '');
+        const val = $(cells[1]).text().trim();
+        if (key && val && key.length < 100 && val.length < 300) {
+          attributes[key] = val;
+        }
       }
     });
   });
-  // Button variants
-  $('.variant-button, [class*="variant"] button, .size-selector button').each((_, btn) => {
-    const text = $(btn).text().trim();
-    const val = $(btn).attr('data-value') || $(btn).attr('value') || text;
-    if (text) variants.push({ group: 'variant', label: text, value: val, price: null });
+
+  // DL/DT format (specyfikacja techniczna)
+  $('dl').each((_, dl) => {
+    $(dl).find('dt').each((i, dt) => {
+      const dd = $(dl).find('dd').eq(i);
+      const key = $(dt).text().trim();
+      const val = dd.text().trim();
+      if (key && val) attributes[key] = val;
+    });
   });
 
-  // ── Dostępność ──
-  const availability =
-    $('[itemprop="availability"]').attr('href')?.includes('InStock') ||
-    $('.in-stock, .product-available, [class*="in-stock"]').length > 0
-      ? 'in_stock'
-      : 'out_of_stock';
+  // Podmiot wprowadzający
+  const supplierMatch = $('table').text().match(/Podmiot wprowadzający[^|]+?\|\s*(.+?)(?:\n|\|)/);
+  if (supplierMatch) attributes['Podmiot wprowadzający'] = supplierMatch[1].trim();
 
-  // ── Opcje wysyłki ──
-  const shippingOptions = [];
-  $('.shipping-method, .delivery-option, [class*="shipping"] li, [class*="delivery"] li').each((_, el) => {
-    const name = $(el).find('[class*="name"], span').first().text().trim();
-    const priceText = $(el).find('[class*="price"]').text().trim();
-    const timeText = $(el).find('[class*="time"], [class*="days"]').text().trim();
-    if (name) {
-      shippingOptions.push({
-        name,
-        price: parseFloat(priceText.replace(/[^0-9,.]/g, '').replace(',', '.')) || 0,
-        deliveryTime: timeText || '',
+  // Nr artykułu
+  attributes['Nr artykułu'] = sku;
+
+  // ── Warianty ──
+  const variants = [];
+  const variantSeen = new Set();
+
+  // Smaki/rozmiary jako linki produktowe
+  $('a[href*="/p/"]').each((_, el) => {
+    const href = $(el).attr('href') || '';
+    const text = $(el).text().trim();
+    if (!href.match(/\/p\/[a-z0-9%-]+-\d{5,}/) || text.length > 100 || text.length < 2) return;
+
+    const varUrl = (href.startsWith('http') ? href : BASE + href)
+      .split('?')[0].replace(/([^/])$/, '$1/');
+    if (variantSeen.has(varUrl)) return;
+    variantSeen.add(varUrl);
+
+    // Wyciągnij cenę wariantu
+    const priceM = text.match(/(\d+[,.]\d+)\s*zł/);
+    const sizeM  = text.match(/(\d+(?:[,x]\d+)?\s*(?:kg|g|ml|l|szt\.?|pack|tab))/i);
+    const flavorM = text.match(/^([A-ZŁŚŹ][a-złśźćęóąń\s]+)(?:\s+\d)/);
+
+    const varBasePrice = priceM ? parseFloat(priceM[1].replace(',','.')) : null;
+    const varFinalPrice = varBasePrice ? Math.ceil(varBasePrice * (1 + MARGIN) * 100) / 100 : null;
+
+    variants.push({
+      label:      text.replace(/\s+/g, ' ').slice(0, 80),
+      url:        varUrl,
+      size:       sizeM?.[1]  || null,
+      flavor:     flavorM?.[1]?.trim() || null,
+      basePrice:  varBasePrice,
+      finalPrice: varFinalPrice,
+      isCurrentVariant: varUrl === url.split('?')[0].replace(/([^/])$/, '$1/'),
+    });
+  });
+
+  // ── Zalecenia karmienia (tabela) ──
+  const feedingGuide = [];
+  $('table').each((_, table) => {
+    const header = $(table).prev('h2, h3, strong').text();
+    if (/zalecenia|karmien|dawkow/i.test(header)) {
+      $(table).find('tr').each((_, row) => {
+        const cells = $(row).find('td');
+        if (cells.length >= 2) {
+          feedingGuide.push({
+            weight: $(cells[0]).text().trim(),
+            amount: $(cells[1]).text().trim(),
+          });
+        }
       });
     }
   });
-  // Domyślna opcja jeśli brak
-  if (shippingOptions.length === 0) {
-    shippingOptions.push(
-      { name: 'Kurier DPD', price: 12.99, deliveryTime: '1-2 dni robocze' },
-      { name: 'Paczkomat InPost', price: 9.99, deliveryTime: '1-2 dni robocze' },
-      { name: 'Dostawa do sklepu', price: 0, deliveryTime: '2-3 dni robocze' }
-    );
-  }
 
-  // ── Breadcrumbs / kategoria ──
+  // ── Dostępność ──
+  const bodyText = $('body').text();
+  const availability = /Do koszyka|Dodaj do koszyka|W ciągu \d/i.test(bodyText)
+    ? 'in_stock' : 'out_of_stock';
+
+  // Czas dostawy
+  const deliveryMatch = bodyText.match(/W ciągu\s+(\d+\s*[-–]\s*\d+\s*dni[a-z\s]*)/i);
+  const deliveryTime = deliveryMatch?.[1]?.trim() || '1-3 dni robocze';
+
+  // ── Breadcrumbs ──
   const breadcrumbs = [];
-  $('[itemprop="breadcrumb"] li, .breadcrumb li, nav[aria-label="breadcrumb"] li').each((_, li) => {
-    const text = $(li).text().trim().replace(/›|»|>/g, '').trim();
-    if (text) breadcrumbs.push(text);
+  const bcSeen = new Set();
+  $('a[href*="/c/"]').each((_, el) => {
+    const href = $(el).attr('href') || '';
+    const text = $(el).text().trim();
+    if (href.startsWith('/c/') && text.length > 1 && text.length < 60 && !bcSeen.has(href)) {
+      bcSeen.add(href);
+      breadcrumbs.push({ name: text, url: BASE + href });
+    }
   });
+  breadcrumbs.push({ name, url });
 
-  // ── Rating ──
-  const ratingRaw = $('[itemprop="ratingValue"]').attr('content') || $('[class*="rating-value"]').text().trim();
-  const rating = parseFloat(ratingRaw) || null;
-  const reviewCount = parseInt($('[itemprop="reviewCount"]').attr('content') || '0') || 0;
+  // ── Klasa wysyłki na podstawie wagi produktu ──
+  const weightAttr = attributes['Waga'] || attributes['Waga produktu'] || attributes['Masa'] || '';
+  const weightKg = parseFloat(weightAttr.replace(',','.')) || 0;
+  let shippingClass = 'standard';
+  if (weightKg >= 25)      shippingClass = 'heavy';
+  else if (finalPrice >= 149) shippingClass = 'free';
 
-  const slug = makeSlug(name) + '-' + sku.slice(-6);
+  // Slug z URL
+  const slug = url.replace(BASE + '/p/', '').replace(/\/$/, '');
 
   return {
-    id: sku,
+    // ── Identyfikacja ──
+    id:           sku,
     slug,
-    name,
-    brand,
     sku,
-    price,
-    originalPrice,
-    discount: originalPrice ? Math.round((1 - price / originalPrice) * 100) : null,
-    category: categoryName,
+    name,
+    brand:        brand || 'Maxi Zoo',
+    category:     categoryName,
+    categoryPath,
     breadcrumbs,
-    description,
-    images: images.slice(0, 8),
+
+    // ── Ceny (z marżą) ──
+    pricing: {
+      basePrice,              // cena oryginalna z maxizoo.pl
+      margin:    MARGIN,      // 0.10 = 10%
+      finalPrice,             // cena w Twoim sklepie (+10%)
+      unitPrice,              // cena/kg lub /l (z marżą)
+      currency:  'PLN',
+    },
+
+    // ── Treść ──
+    description:     shortDesc.join('\n'),
+    longDescription: longDesc,
+    ingredients,
+    feedingGuide,
+
+    // ── Media ──
+    images:      images.slice(0, 12),
+    localImages: [],
+
+    // ── Dane techniczne ──
     attributes,
-    variants,
+    variants: variants.slice(0, 20),
+
+    // ── Dostępność i wysyłka ──
     availability,
-    shippingOptions,
-    rating,
-    reviewCount,
-    sourceUrl: url,
-    scrapedAt: new Date().toISOString(),
+    deliveryTime,
+    shippingClass,
+    shippingOptions: SHIPPING_CLASSES,
+
+    // ── Meta ──
+    sourceUrl:  url,
+    scrapedAt:  new Date().toISOString(),
   };
 }
 
-// ─── 4. Pobieranie zdjęć ─────────────────────────────────────────────────────
+// ─── 4. Pobierz zdjęcia ──────────────────────────────────────────────
 async function downloadImages(products) {
-  await fs.ensureDir(IMAGES_DIR);
+  await fs.ensureDir(IMG_DIR);
   const limit = pLimit(4);
-  let downloaded = 0;
-  let skipped = 0;
+  let ok = 0, skip = 0, fail = 0;
 
-  const tasks = [];
-  for (const product of products) {
-    product.localImages = [];
-    for (let i = 0; i < product.images.length; i++) {
-      const imgUrl = product.images[i];
-      const ext = imgUrl.split('.').pop().split('?')[0] || 'jpg';
-      const filename = `${product.slug}-${i}.${ext}`;
-      const filepath = path.join(IMAGES_DIR, filename);
-      product.localImages.push(`/images/products/${filename}`);
+  const tasks = products.flatMap(p =>
+    p.images.map((imgUrl, i) => limit(async () => {
+      const cleanUrl = imgUrl.split('?')[0];
+      const ext = cleanUrl.split('.').pop().toLowerCase().replace(/[^a-z]/g,'') || 'jpg';
+      const fname = `${p.slug.replace(/[^a-z0-9-]/g,'').slice(-45)}-${i}.${ext}`;
+      const fpath = path.join(IMG_DIR, fname);
+      p.localImages[i] = `/images/products/${fname}`;
 
-      tasks.push(limit(async () => {
-        if (await fs.pathExists(filepath)) { skipped++; return; }
-        try {
-          const res = await axios.get(imgUrl, {
-            responseType: 'arraybuffer',
-            timeout: 15000,
-            headers: { 'User-Agent': 'Mozilla/5.0 (compatible; MaxiZooShopBot/1.0)' }
-          });
-          await fs.writeFile(filepath, res.data);
-          downloaded++;
-        } catch {
-          product.localImages[i] = imgUrl; // fallback do oryginału
-        }
-      }));
-    }
-  }
+      if (await fs.pathExists(fpath)) { skip++; return; }
+      try {
+        const res = await axios.get(cleanUrl, {
+          responseType: 'arraybuffer', timeout: 20000,
+          headers: { Referer: BASE + '/', 'User-Agent': 'Mozilla/5.0' },
+        });
+        await fs.writeFile(fpath, res.data);
+        ok++;
+      } catch {
+        p.localImages[i] = imgUrl; // fallback do oryginalnego URL
+        fail++;
+      }
+    }))
+  );
 
   await Promise.all(tasks);
-  console.log(`  ✅ Zdjęcia: ${downloaded} pobrano, ${skipped} pominięto (istniały)`);
+  console.log(`  📸 Zdjęcia: ✅ ${ok} pobrano  ⏩ ${skip} pominięto  ❌ ${fail} błędów`);
 }
 
-// ─── MAIN ────────────────────────────────────────────────────────────────────
+// ─── MAIN ────────────────────────────────────────────────────────────
 (async () => {
-  console.log('═══════════════════════════════════════════════');
-  console.log('  MaxiZoo.pl Scraper — Senior Dev Edition');
-  console.log(`  Tryb: ${IS_TEST ? 'TEST (max 5 produktów/kategorię)' : 'PEŁNY'}`);
-  console.log('═══════════════════════════════════════════════');
+  const startTime = Date.now();
+  console.log('\n╔══════════════════════════════════════════════════════╗');
+  console.log('║  MaxiZoo.pl Scraper v3  —  Senior Dev Edition        ║');
+  console.log(`║  Marża: +${(MARGIN*100).toFixed(0)}%  |  Tryb: ${IS_TEST ? 'TEST (5 prod/kat)    ' : 'PEŁNY               '}║`);
+  console.log('╚══════════════════════════════════════════════════════╝\n');
 
-  await fs.ensureDir(OUTPUT_DIR);
+  await fs.ensureDir(OUT_DIR);
+  await fs.ensureDir(IMG_DIR);
 
-  const browser = await puppeteer.launch({
-    headless: 'new',
-    args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
-  });
-  const page = await browser.newPage();
-  await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36');
-  await page.setViewport({ width: 1280, height: 800 });
+  // 1. Odkryj kategorie
+  const allCategories = await discoverAllCategories();
+  const categories = CAT_FILTER
+    ? allCategories.filter(c => c.path.includes(CAT_FILTER) || c.name.toLowerCase().includes(CAT_FILTER.toLowerCase()))
+    : allCategories;
 
-  // Blokuj reklamy/trackers
-  await page.setRequestInterception(true);
-  page.on('request', (req) => {
-    const type = req.resourceType();
-    if (['font', 'media'].includes(type)) req.abort();
-    else req.continue();
-  });
+  await fs.writeJson(path.join(OUT_DIR, 'categories.json'), allCategories, { spaces: 2 });
+  console.log(`📁 Zapisano ${allCategories.length} kategorii → categories.json\n`);
 
-  let allProducts = [];
+  // 2. Scrape produktów
+  const allProducts = [];
+  const seenProductUrls = new Set();
+  const limit = pLimit(1);
 
-  try {
-    const categories = await scrapeCategories(page);
+  for (const cat of categories) {
+    const maxProd = IS_TEST ? 5 : Infinity;
+    process.stdout.write(`🐾 [${cat.depth === 1 ? '●' : cat.depth === 2 ? '○' : '·'}] ${cat.name.padEnd(40)} `);
 
-    for (const category of categories) {
-      console.log(`\n🐾 Kategoria: ${category.name}`);
-      const maxPerCat = IS_TEST ? 5 : 200;
-      const productUrls = await scrapeProductUrls(page, category.href, maxPerCat);
-      console.log(`  🔗 URL produktów: ${productUrls.length}`);
+    let urls;
+    try { urls = await getProductUrls(cat.path, maxProd); }
+    catch { console.log('BŁĄD'); continue; }
 
-      const limit = pLimit(1); // sekwencyjnie aby nie przeciążać serwera
-      const results = await Promise.all(
-        productUrls.map(url => limit(async () => {
-          const p = await scrapeProduct(page, url, category.name);
-          if (p) {
-            process.stdout.write('.');
-            allProducts.push(p);
-          }
-          await delay(500 + Math.random() * 500);
-          return p;
-        }))
-      );
-      console.log(`\n  ✅ Pobrano ${results.filter(Boolean).length} produktów`);
-    }
+    // Tylko nowe URLe (unikamy duplikatów z nakładających się kategorii)
+    const newUrls = urls.filter(u => !seenProductUrls.has(u));
+    newUrls.forEach(u => seenProductUrls.add(u));
+    console.log(`→ ${newUrls.length} prod.`);
 
-    console.log(`\n📥 Pobieranie zdjęć (${allProducts.reduce((a, p) => a + p.images.length, 0)} szt.)...`);
-    await downloadImages(allProducts);
-
-    // Zapis JSON
-    const outputPath = path.join(OUTPUT_DIR, 'products.json');
-    await fs.writeJson(outputPath, {
-      scrapedAt: new Date().toISOString(),
-      totalProducts: allProducts.length,
-      products: allProducts,
-    }, { spaces: 2 });
-
-    // Zapis kategorii
-    const uniqueCategories = [...new Set(allProducts.map(p => p.category))].map(name => ({
-      id: makeSlug(name),
-      name,
-      slug: makeSlug(name),
-      count: allProducts.filter(p => p.category === name).length,
+    const catProducts = [];
+    const tasks = newUrls.map(url => limit(async () => {
+      try {
+        const p = await scrapeProduct(url, cat.name, cat.path);
+        if (p) { allProducts.push(p); catProducts.push(p); }
+      } catch { /* silent */ }
+      await REQ_DELAY();
     }));
-    await fs.writeJson(path.join(OUTPUT_DIR, 'categories.json'), uniqueCategories, { spaces: 2 });
+    await Promise.all(tasks);
 
-    console.log('\n═══════════════════════════════════════════════');
-    console.log(`✅ Gotowe! Scraped ${allProducts.length} produktów`);
-    console.log(`📄 Zapis: ${outputPath}`);
-    console.log('═══════════════════════════════════════════════');
-
-  } finally {
-    await browser.close();
+    // Zapis częściowy co 50 produktów
+    if (allProducts.length % 50 === 0 && allProducts.length > 0) {
+      await saveProducts(allProducts);
+      process.stdout.write(`  💾 Autosave: ${allProducts.length} produktów\n`);
+    }
   }
+
+  // 3. Pobierz zdjęcia
+  const totalImages = allProducts.reduce((a, p) => a + p.images.length, 0);
+  console.log(`\n📥 Pobieranie ${totalImages} zdjęć (${allProducts.length} produktów)...`);
+  await downloadImages(allProducts);
+
+  // 4. Zapis finalny
+  await saveProducts(allProducts);
+  await saveStats(allProducts, allCategories, startTime);
+
+  const elapsed = ((Date.now() - startTime) / 1000 / 60).toFixed(1);
+  console.log('\n╔══════════════════════════════════════════════════════╗');
+  console.log(`║  ✅ GOTOWE!  ${String(allProducts.length).padEnd(6)} produktów  ⏱️  ${elapsed} min          ║`);
+  console.log(`║  Marża +10%: ceny podniesione automatycznie          ║`);
+  console.log('╚══════════════════════════════════════════════════════╝\n');
 })();
+
+// ─── Zapis do pliku ───────────────────────────────────────────────────
+async function saveProducts(products) {
+  const outPath = path.join(OUT_DIR, 'products.json');
+  await fs.writeJson(outPath, {
+    source:        'maxizoo.pl',
+    margin:        '10%',
+    scrapedAt:     new Date().toISOString(),
+    totalProducts: products.length,
+    products,
+  }, { spaces: 2 });
+}
+
+async function saveStats(products, categories, startTime) {
+  const stats = {
+    scrapedAt:      new Date().toISOString(),
+    duration:       `${((Date.now()-startTime)/1000/60).toFixed(1)} min`,
+    totalProducts:  products.length,
+    totalCategories: categories.length,
+    totalImages:    products.reduce((a,p) => a + p.images.length, 0),
+    margin:         '10%',
+    byCategory: categories.map(c => ({
+      name:  c.name,
+      path:  c.path,
+      count: products.filter(p => p.categoryPath === c.path).length,
+    })).filter(c => c.count > 0),
+    priceRange: {
+      min: Math.min(...products.map(p => p.pricing.finalPrice).filter(Boolean)),
+      max: Math.max(...products.map(p => p.pricing.finalPrice).filter(Boolean)),
+      avg: Math.round(products.reduce((a,p) => a + (p.pricing.finalPrice||0), 0) / products.length * 100) / 100,
+    },
+    brands: [...new Set(products.map(p => p.brand))].sort(),
+    shippingClasses: SHIPPING_CLASSES.map(s => s.id),
+  };
+  await fs.writeJson(path.join(OUT_DIR, 'scrape-stats.json'), stats, { spaces: 2 });
+  console.log('\n📊 Statystyki zapisane → scrape-stats.json');
+}
