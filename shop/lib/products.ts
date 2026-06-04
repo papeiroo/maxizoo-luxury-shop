@@ -5,28 +5,42 @@ import type { Product, Category } from '@/types'
 let _products: Product[] | null = null
 let _categories: Category[] | null = null
 
-// Normalizuje produkt ze scrapera v3 (pricing.finalPrice) do formatu sklepu (price)
+// Normalizuje format scrapera v3 (pricing.finalPrice) do formatu sklepu (price)
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function normalizeProduct(p: any): Product {
-  const price = p.price ?? p.pricing?.finalPrice ?? 0
-  const originalPrice = p.originalPrice ?? p.pricing?.basePrice ?? null
+  const price: number = p.price ?? p.pricing?.finalPrice ?? 0
+  const originalPrice: number | null = p.originalPrice ?? p.pricing?.basePrice ?? null
+  const discount: number | null =
+    originalPrice && originalPrice > price
+      ? Math.round((1 - price / originalPrice) * 100)
+      : p.discount ?? null
+
+  const breadcrumbs: string[] = Array.isArray(p.breadcrumbs)
+    ? p.breadcrumbs.map((b: any) => (typeof b === 'string' ? b : b.name ?? ''))
+    : []
+
   return {
-    ...p,
+    id: String(p.id ?? p.sku ?? ''),
+    slug: p.slug ?? '',
+    name: p.name ?? '',
+    brand: p.brand ?? 'Maxi Zoo',
+    sku: p.sku ?? String(p.id ?? ''),
     price,
     originalPrice,
-    discount: originalPrice && originalPrice > price
-      ? Math.round((1 - price / originalPrice) * 100)
-      : p.discount ?? null,
-    brand: p.brand || 'Maxi Zoo',
-    category: p.category || p.categoryPath?.[0] || 'Inne',
-    images: p.images || [],
-    localImages: p.localImages || [],
-    attributes: p.attributes || {},
-    variants: p.variants || [],
-    availability: p.availability || 'in_stock',
-    shippingOptions: p.shippingOptions || [],
-    rating: p.rating ?? null,
-    reviewCount: p.reviewCount ?? 0,
+    discount,
+    category: p.category ?? p.categoryPath?.[0] ?? 'Inne',
+    breadcrumbs,
+    description: p.description ?? p.longDescription ?? '',
+    images: Array.isArray(p.images) ? p.images : [],
+    localImages: Array.isArray(p.localImages) ? p.localImages : [],
+    attributes: p.attributes && typeof p.attributes === 'object' ? p.attributes : {},
+    variants: Array.isArray(p.variants) ? p.variants : [],
+    availability: p.availability === 'out_of_stock' ? 'out_of_stock' : 'in_stock',
+    shippingOptions: Array.isArray(p.shippingOptions) ? p.shippingOptions : [],
+    rating: typeof p.rating === 'number' ? p.rating : null,
+    reviewCount: typeof p.reviewCount === 'number' ? p.reviewCount : 0,
+    sourceUrl: p.sourceUrl ?? p.url ?? 'https://www.maxizoo.pl',
+    scrapedAt: p.scrapedAt ?? new Date().toISOString(),
   }
 }
 
@@ -36,11 +50,11 @@ function loadProducts(): Product[] {
     const filePath = path.join(process.cwd(), 'data', 'products.json')
     const raw = fs.readFileSync(filePath, 'utf-8')
     const data = JSON.parse(raw)
-    const raw_products: Product[] = data.products || data
-    _products = raw_products.map(normalizeProduct)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const list: any[] = Array.isArray(data) ? data : (data.products ?? [])
+    _products = list.map(normalizeProduct)
     return _products
   } catch {
-    // Zwróć przykładowe produkty jeśli brak pliku
     return getSampleProducts()
   }
 }
@@ -50,7 +64,14 @@ function loadCategories(): Category[] {
   try {
     const filePath = path.join(process.cwd(), 'data', 'categories.json')
     const raw = fs.readFileSync(filePath, 'utf-8')
-    _categories = JSON.parse(raw)
+    const data = JSON.parse(raw)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    _categories = data.map((c: any) => ({
+      id: c.id ?? c.slug ?? c.name,
+      name: c.name,
+      slug: c.slug ?? c.name?.toLowerCase().replace(/\s+/g, '-'),
+      count: c.count ?? 0,
+    }))
     return _categories as Category[]
   } catch {
     const products = loadProducts()
@@ -65,16 +86,27 @@ function loadCategories(): Category[] {
   }
 }
 
-export function getProducts(opts?: { category?: string; search?: string; page?: number; limit?: number }) {
+export function getProducts(opts?: {
+  category?: string
+  search?: string
+  page?: number
+  limit?: number
+}) {
   let products = loadProducts()
-  if (opts?.category) products = products.filter(p => p.category.toLowerCase() === opts.category?.toLowerCase())
+  if (opts?.category) {
+    products = products.filter(
+      p => p.category.toLowerCase() === opts.category?.toLowerCase()
+    )
+  }
   if (opts?.search) {
     const q = opts.search.toLowerCase()
-    products = products.filter(p => p.name.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q))
+    products = products.filter(
+      p => p.name.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q)
+    )
   }
   const total = products.length
-  const limit = opts?.limit || 24
-  const page = opts?.page || 1
+  const limit = opts?.limit ?? 24
+  const page = opts?.page ?? 1
   const start = (page - 1) * limit
   return { products: products.slice(start, start + limit), total, pages: Math.ceil(total / limit) }
 }
@@ -88,34 +120,58 @@ export function getCategories(): Category[] {
 }
 
 export function getFeaturedProducts(limit = 8): Product[] {
-  return loadProducts().filter(p => p.availability === 'in_stock').slice(0, limit)
+  return loadProducts()
+    .filter(p => p.availability === 'in_stock')
+    .slice(0, limit)
 }
 
-// ─── Przykładowe produkty (demo bez scrapera) ────────────────────────────────
 function getSampleProducts(): Product[] {
   return [
     {
-      id: 'sample-001', slug: 'royal-canin-adult-12kg-001',
-      name: 'Royal Canin Adult 12kg', brand: 'Royal Canin', sku: 'RC-AD-12',
-      price: 239.99, originalPrice: 279.99, discount: 14,
-      category: 'Psy', breadcrumbs: ['Sklep', 'Psy', 'Karma sucha'],
-      description: '<p>Pełnoporcjowa karma dla dorosłych psów. Bogata w białko i witaminy.</p>',
-      images: ['https://www.maxizoo.pl/medias/Royal-Canin-Adult-12kg.jpg'],
-      localImages: ['/images/products/royal-canin-adult-12kg-001-0.jpg'],
-      attributes: { 'Waga': '12 kg', 'Gatunek': 'Pies', 'Wiek': 'Dorosły' },
-      variants: [
-        { group: 'Rozmiar', label: '2 kg', value: '2kg', price: 59.99 },
-        { group: 'Rozmiar', label: '4 kg', value: '4kg', price: 109.99 },
-        { group: 'Rozmiar', label: '12 kg', value: '12kg', price: 239.99 },
-      ],
+      id: 'sample-001',
+      slug: 'royal-canin-adult-12kg-001',
+      name: 'Royal Canin Adult 12kg',
+      brand: 'Royal Canin',
+      sku: 'RC-AD-12',
+      price: 239.99,
+      originalPrice: 279.99,
+      discount: 14,
+      category: 'Psy',
+      breadcrumbs: ['Sklep', 'Psy', 'Karma sucha'],
+      description: '<p>Pełnoporcjowa karma dla dorosłych psów.</p>',
+      images: [],
+      localImages: [],
+      attributes: { Waga: '12 kg', Gatunek: 'Pies' },
+      variants: [],
       availability: 'in_stock',
-      shippingOptions: [
-        { name: 'Kurier DPD', price: 12.99, deliveryTime: '1-2 dni robocze' },
-        { name: 'Paczkomat InPost', price: 9.99, deliveryTime: '1-2 dni robocze' },
-        { name: 'Odbiór własny', price: 0, deliveryTime: '2-3 dni robocze' },
-      ],
-      rating: 4.8, reviewCount: 342,
-      sourceUrl: 'https://www.maxizoo.pl', scrapedAt: new Date().toISOString(),
+      shippingOptions: [],
+      rating: 4.8,
+      reviewCount: 342,
+      sourceUrl: 'https://www.maxizoo.pl',
+      scrapedAt: new Date().toISOString(),
     },
     {
-      
+      id: 'sample-002',
+      slug: 'hills-science-plan-kitten-002',
+      name: "Hill's Science Plan Kitten 3kg",
+      brand: "Hill's",
+      sku: 'HS-KIT-3',
+      price: 89.99,
+      originalPrice: null,
+      discount: null,
+      category: 'Koty',
+      breadcrumbs: ['Sklep', 'Koty', 'Karma sucha'],
+      description: '<p>Karma dla kociąt bogata w kurczaka.</p>',
+      images: [],
+      localImages: [],
+      attributes: { Waga: '3 kg', Gatunek: 'Kot' },
+      variants: [],
+      availability: 'in_stock',
+      shippingOptions: [],
+      rating: 4.6,
+      reviewCount: 218,
+      sourceUrl: 'https://www.maxizoo.pl',
+      scrapedAt: new Date().toISOString(),
+    },
+  ]
+}
