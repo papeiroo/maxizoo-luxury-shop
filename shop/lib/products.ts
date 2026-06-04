@@ -5,14 +5,40 @@ import type { Product, Category } from '@/types'
 let _products: Product[] | null = null
 let _categories: Category[] | null = null
 
+// Normalizuje produkt ze scrapera v3 (pricing.finalPrice) do formatu sklepu (price)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function normalizeProduct(p: any): Product {
+  const price = p.price ?? p.pricing?.finalPrice ?? 0
+  const originalPrice = p.originalPrice ?? p.pricing?.basePrice ?? null
+  return {
+    ...p,
+    price,
+    originalPrice,
+    discount: originalPrice && originalPrice > price
+      ? Math.round((1 - price / originalPrice) * 100)
+      : p.discount ?? null,
+    brand: p.brand || 'Maxi Zoo',
+    category: p.category || p.categoryPath?.[0] || 'Inne',
+    images: p.images || [],
+    localImages: p.localImages || [],
+    attributes: p.attributes || {},
+    variants: p.variants || [],
+    availability: p.availability || 'in_stock',
+    shippingOptions: p.shippingOptions || [],
+    rating: p.rating ?? null,
+    reviewCount: p.reviewCount ?? 0,
+  }
+}
+
 function loadProducts(): Product[] {
   if (_products) return _products
   try {
     const filePath = path.join(process.cwd(), 'data', 'products.json')
     const raw = fs.readFileSync(filePath, 'utf-8')
     const data = JSON.parse(raw)
-    _products = data.products || data
-    return _products as Product[]
+    const raw_products: Product[] = data.products || data
+    _products = raw_products.map(normalizeProduct)
+    return _products
   } catch {
     // Zwróć przykładowe produkty jeśli brak pliku
     return getSampleProducts()
@@ -92,22 +118,4 @@ function getSampleProducts(): Product[] {
       sourceUrl: 'https://www.maxizoo.pl', scrapedAt: new Date().toISOString(),
     },
     {
-      id: 'sample-002', slug: 'hill-science-plan-kitten-002',
-      name: "Hill's Science Plan Kitten 3kg", brand: "Hill's", sku: 'HS-KIT-3',
-      price: 89.99, originalPrice: null, discount: null,
-      category: 'Koty', breadcrumbs: ['Sklep', 'Koty', 'Karma sucha'],
-      description: '<p>Karma dla kociąt bogata w kurczaka. Wspiera prawidłowy rozwój.</p>',
-      images: ['https://www.maxizoo.pl/medias/Hills-Kitten-3kg.jpg'],
-      localImages: ['/images/products/hill-science-plan-kitten-002-0.jpg'],
-      attributes: { 'Waga': '3 kg', 'Gatunek': 'Kot', 'Wiek': 'Kocię' },
-      variants: [],
-      availability: 'in_stock',
-      shippingOptions: [
-        { name: 'Kurier DPD', price: 12.99, deliveryTime: '1-2 dni robocze' },
-        { name: 'Paczkomat InPost', price: 9.99, deliveryTime: '1-2 dni robocze' },
-      ],
-      rating: 4.6, reviewCount: 218,
-      sourceUrl: 'https://www.maxizoo.pl', scrapedAt: new Date().toISOString(),
-    },
-  ]
-}
+      

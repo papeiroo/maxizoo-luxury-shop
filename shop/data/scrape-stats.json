@@ -1,0 +1,550 @@
+{
+  "scrapedAt": "2026-06-04T01:21:08.086Z",
+  "duration": "590.8 min",
+  "totalProducts": 1902,
+  "totalCategories": 97,
+  "totalImages": 22824,
+  "margin": "10%",
+  "byCategory": [
+    {
+      "name": "Sucha karma dla kota",
+      "path": "/c/kot/karma-dla-kotow/karma-sucha/",
+      "count": 48
+    },
+    {
+      "name": "Sucha karma dla psa",
+      "path": "/c/pies/karma-dla-psow/karma-sucha/",
+      "count": 48
+    },
+    {
+      "name": "Mokra karma dla psa",
+      "path": "/c/pies/karma-dla-psow/karma-mokra/",
+      "count": 50
+    },
+    {
+      "name": "Mokra karma dla kota",
+      "path": "/c/kot/karma-dla-kotow/karma-mokra/",
+      "count": 52
+    },
+    {
+      "name": "Przysmaki dla psa",
+      "path": "/c/pies/karma-dla-psow/przekaski-i-napoje/",
+      "count": 48
+    },
+    {
+      "name": "Żwirek i piasek dla kota",
+      "path": "/c/kot/higiena-i-pielegnacja/zwirek-dla-kotow/",
+      "count": 49
+    },
+    {
+      "name": "obroży",
+      "path": "/c/pies/spacery/obroza-dla-psa/",
+      "count": 14
+    },
+    {
+      "name": "produktów do pielęgnacji",
+      "path": "/c/akwarystyka/pielegnacja-i-higiena/pielegnacja-wody/",
+      "count": 10
+    },
+    {
+      "name": "Bezpieczeństwo w ciemności",
+      "path": "/c/pies/spacery/bezpieczenstwo-w-ciemnosci/",
+      "count": 35
+    },
+    {
+      "name": "legowisk dla psów",
+      "path": "/c/pies/miejsca-do-spania-dla-psow/legowiska-dla-psow/",
+      "count": 32
+    },
+    {
+      "name": "frisbee",
+      "path": "/c/pies/zabawki-dla-psow/frisbee-i-zabawki-do-rzucania-dla-psow/",
+      "count": 45
+    },
+    {
+      "name": "suplementy",
+      "path": "/c/pies/karma-dla-psow/suplementy-i-hodowla/",
+      "count": 48
+    },
+    {
+      "name": "produkty BARF",
+      "path": "/c/pies/karma-dla-psow/barf-karma-mrozona/",
+      "count": 19
+    },
+    {
+      "name": "transportu psa",
+      "path": "/c/pies/transport-i-bezpieczenstwo/transportery-i-klatki-transportowe/",
+      "count": 27
+    },
+    {
+      "name": "akcesoriów do miejsc",
+      "path": "/c/pies/miejsca-do-spania-dla-psow/koce-dla-psow/",
+      "count": 16
+    },
+    {
+      "name": "Przekąski",
+      "path": "/c/kot/karma-dla-kotow/przekaski/",
+      "count": 48
+    },
+    {
+      "name": "siatkę ochronną",
+      "path": "/c/kot/bezpieczenstwo/siatki-zabezpieczajace/",
+      "count": 7
+    },
+    {
+      "name": "legowisk dla kotów",
+      "path": "/c/kot/sen-odpoczynek/lozka-kanapy/",
+      "count": 12
+    },
+    {
+      "name": "jaskiń",
+      "path": "/c/kot/sen-odpoczynek/jaskinie-dla-kotow/",
+      "count": 22
+    },
+    {
+      "name": "Karma podstawowa",
+      "path": "/c/male-zwierzeta/karma-dla-malych-zwierzat/karma-podstawowa/",
+      "count": 48
+    },
+    {
+      "name": "Przekąski",
+      "path": "/c/male-zwierzeta/karma-dla-malych-zwierzat/przekaski/",
+      "count": 47
+    },
+    {
+      "name": "Ściółka i słoma",
+      "path": "/c/male-zwierzeta/domki-dla-malych-zwierzat/sciolka-i-sloma/",
+      "count": 28
+    },
+    {
+      "name": "Karma podstawowa",
+      "path": "/c/ptaki/karma-dla-ptakow/karma-podstawowa/",
+      "count": 32
+    },
+    {
+      "name": "Przekąski",
+      "path": "/c/ptaki/karma-dla-ptakow/przekaski/",
+      "count": 19
+    },
+    {
+      "name": "Karma uzupełniająca",
+      "path": "/c/ptaki/karma-dla-ptakow/karma-uzupelniajaca/",
+      "count": 10
+    },
+    {
+      "name": "Dno",
+      "path": "/c/akwarystyka/instalacja-i-dodatki/dno/",
+      "count": 7
+    },
+    {
+      "name": "Suplementy do karmy",
+      "path": "/c/terrarystyka/pokarm-dla-zwierzat-w-terrarium/suplementy-do-karmy/",
+      "count": 6
+    },
+    {
+      "name": "Terraria",
+      "path": "/c/terrarystyka/terraria-i-akcesoria/terraria/",
+      "count": 1
+    },
+    {
+      "name": "Oświetlenie",
+      "path": "/c/terrarystyka/terraria-i-akcesoria/oswietlenie/",
+      "count": 5
+    },
+    {
+      "name": "Dekoracja",
+      "path": "/c/terrarystyka/instalacja-i-pielegnacja/dekoracja/",
+      "count": 2
+    },
+    {
+      "name": "Dno",
+      "path": "/c/terrarystyka/instalacja-i-pielegnacja/dno/",
+      "count": 9
+    },
+    {
+      "name": "Wyświetl wszystko",
+      "path": "/c/ogrod-i-staw/dzikie-ptaki/karma-dla-dzikich-ptakow/",
+      "count": 48
+    },
+    {
+      "name": "Hipoalergiczna",
+      "path": "/c/diety-vet/pies/hipoalergiczny/",
+      "count": 31
+    },
+    {
+      "name": "Lekkostrawna",
+      "path": "/c/diety-vet/pies/lekkostrawny/",
+      "count": 41
+    },
+    {
+      "name": "Nadwaga",
+      "path": "/c/diety-vet/pies/nadwaga/",
+      "count": 27
+    },
+    {
+      "name": "Dieta nerkowa",
+      "path": "/c/diety-vet/pies/dieta-nerkowa/",
+      "count": 26
+    },
+    {
+      "name": "Serce i wątroba",
+      "path": "/c/diety-vet/pies/serce-watroba/",
+      "count": 8
+    },
+    {
+      "name": "Dieta nerkowa",
+      "path": "/c/diety-vet/kot/dieta-nerkowa/",
+      "count": 35
+    },
+    {
+      "name": "Hipoalergiczna",
+      "path": "/c/diety-vet/kot/hipoalergiczny/",
+      "count": 20
+    },
+    {
+      "name": "Urinary",
+      "path": "/c/diety-vet/kot/urinary/",
+      "count": 39
+    },
+    {
+      "name": "Lekkostrawna",
+      "path": "/c/diety-vet/kot/lekkostrawny/",
+      "count": 38
+    },
+    {
+      "name": "Nadwaga",
+      "path": "/c/diety-vet/kot/nadwaga/",
+      "count": 19
+    },
+    {
+      "name": "Dieta rekonwalescencyjna",
+      "path": "/c/diety-vet/kot/dieta-rekonwalescencyjna/",
+      "count": 9
+    },
+    {
+      "name": "Ochrona przed kleszczami i pchłami",
+      "path": "/c/pies/pielegnacja-i-higiena/srodki-odstraszajace-pchly-i-kleszcze/",
+      "count": 4
+    },
+    {
+      "name": "Pielęgnacja zębów",
+      "path": "/c/pies/pielegnacja-i-higiena/pielegnacja-zebow/",
+      "count": 42
+    },
+    {
+      "name": "Ochrona przed kleszczami i pchłami",
+      "path": "/c/kot/higiena-i-pielegnacja/pasozyty-ochrona-przed-kleszczami/",
+      "count": 1
+    },
+    {
+      "name": "Pielęgnacja zębów",
+      "path": "/c/kot/higiena-i-pielegnacja/pielegnacja-zebow/",
+      "count": 3
+    },
+    {
+      "name": "Suplementy diety",
+      "path": "/c/kot/karma-dla-kotow/suplementy/",
+      "count": 25
+    },
+    {
+      "name": "Niezbędnik na letni urlop z psem",
+      "path": "/c/pies/transport-i-bezpieczenstwo/",
+      "count": 34
+    },
+    {
+      "name": "Mrucząco udane wakacje",
+      "path": "/c/kot/w-drodze/",
+      "count": 17
+    },
+    {
+      "name": "Niezbędniki na świeże powietrze",
+      "path": "/c/kot/bezpieczenstwo/",
+      "count": 12
+    },
+    {
+      "name": "MultiFit",
+      "path": "/c/marki/multifit/",
+      "count": 23
+    },
+    {
+      "name": "REAL NATURE",
+      "path": "/c/marki/real-nature/",
+      "count": 9
+    },
+    {
+      "name": "Spacer z psem",
+      "path": "/c/pies/spacery/",
+      "count": 33
+    },
+    {
+      "name": "Zabawki",
+      "path": "/c/pies/zabawki-dla-psow/",
+      "count": 27
+    },
+    {
+      "name": "Pielęgnacja i higiena",
+      "path": "/c/pies/pielegnacja-i-higiena/",
+      "count": 25
+    },
+    {
+      "name": "Przytulne legowiska",
+      "path": "/c/pies/miejsca-do-spania-dla-psow/",
+      "count": 21
+    },
+    {
+      "name": "Ciepłe ubranka",
+      "path": "/c/pies/odziez-dla-psow/",
+      "count": 23
+    },
+    {
+      "name": "wysokiej jakości karmą,",
+      "path": "/c/pies/karma-dla-psow/",
+      "count": 3
+    },
+    {
+      "name": "Zabawki",
+      "path": "/c/kot/zabawki-dla-kotow/",
+      "count": 48
+    },
+    {
+      "name": "Drapaki dla kota",
+      "path": "/c/kot/drapaki/",
+      "count": 47
+    },
+    {
+      "name": "Miejsca do spania",
+      "path": "/c/kot/sen-odpoczynek/",
+      "count": 9
+    },
+    {
+      "name": "Pielęgnacja futra",
+      "path": "/c/kot/higiena-i-pielegnacja/",
+      "count": 18
+    },
+    {
+      "name": "Starsze koty",
+      "path": "/c/kot/karma-dla-kotow/",
+      "count": 2
+    },
+    {
+      "name": "Pielęgnacja i higiena",
+      "path": "/c/male-zwierzeta/pielegnacja-i-higiena/",
+      "count": 11
+    },
+    {
+      "name": "Domki",
+      "path": "/c/male-zwierzeta/domki-dla-malych-zwierzat/",
+      "count": 36
+    },
+    {
+      "name": "Zabawki",
+      "path": "/c/male-zwierzeta/zabawka-dla-malych-zwierzat/",
+      "count": 17
+    },
+    {
+      "name": "Pielęgnacja i higiena",
+      "path": "/c/ptaki/pielegnacja-i-higiena/",
+      "count": 6
+    },
+    {
+      "name": "Domki",
+      "path": "/c/ptaki/domki-dla-ptakow/",
+      "count": 25
+    },
+    {
+      "name": "Zabawki",
+      "path": "/c/ptaki/zabawki-dla-ptakow/",
+      "count": 5
+    },
+    {
+      "name": "Karma",
+      "path": "/c/akwarystyka/karma-dla-ryb/",
+      "count": 22
+    },
+    {
+      "name": "Akcesoria",
+      "path": "/c/akwarystyka/akcesoria/",
+      "count": 42
+    },
+    {
+      "name": "Akwaria",
+      "path": "/c/akwarystyka/akwaria/",
+      "count": 1
+    },
+    {
+      "name": "Dodatki",
+      "path": "/c/akwarystyka/instalacja-i-dodatki/",
+      "count": 20
+    },
+    {
+      "name": "Pielegnacja & Higiena",
+      "path": "/c/akwarystyka/pielegnacja-i-higiena/",
+      "count": 15
+    },
+    {
+      "name": "Pokarm",
+      "path": "/c/terrarystyka/pokarm-dla-zwierzat-w-terrarium/",
+      "count": 4
+    },
+    {
+      "name": "Wyświetl wszystko",
+      "path": "/c/terrarystyka/instalacja-i-pielegnacja/",
+      "count": 1
+    },
+    {
+      "name": "Wyświetl wszystko",
+      "path": "/c/terrarystyka/terraria-i-akcesoria/",
+      "count": 2
+    },
+    {
+      "name": "Kury i gospodarstwo",
+      "path": "/c/ogrod-i-staw/kury-i-gospodarstwo-rolne/",
+      "count": 24
+    },
+    {
+      "name": "Dzikie Ptaki",
+      "path": "/c/ogrod-i-staw/dzikie-ptaki/",
+      "count": 12
+    },
+    {
+      "name": "Dzikie zwierzęta",
+      "path": "/c/ogrod-i-staw/dzikie-zwierzeta/",
+      "count": 13
+    },
+    {
+      "name": "Pokarm dla ryb stawowych",
+      "path": "/c/ogrod-i-staw/pokarm-dla-ryb-stawowych/",
+      "count": 16
+    },
+    {
+      "name": "Pielęgnacja stawu",
+      "path": "/c/ogrod-i-staw/pielegnacja-stawu/",
+      "count": 9
+    },
+    {
+      "name": "Akcesoria do stawów",
+      "path": "/c/ogrod-i-staw/urzadzenia-i-akcesoria-do-stawow-i-oczek-wodnych/",
+      "count": 10
+    }
+  ],
+  "priceRange": {
+    "min": 1.77,
+    "max": 1529.54,
+    "avg": 89.42
+  },
+  "brands": [
+    "4pets",
+    "8in1",
+    "ACANA",
+    "Amtra",
+    "AniOne",
+    "Aumüller",
+    "BLUE TREE",
+    "BOZITA",
+    "Bactador",
+    "Beaphar",
+    "Beeztees",
+    "Benek",
+    "Biokat's",
+    "Bogadent",
+    "Bunny",
+    "CAT'S LOVE",
+    "CATSAN",
+    "Canina",
+    "Canosept",
+    "Cat's Best",
+    "Catit",
+    "Chewies",
+    "Chipsi",
+    "ChuckIt",
+    "Claus",
+    "DENNERLE",
+    "DentaLife",
+    "Dogs Creek",
+    "Doppelherz",
+    "Dreamies",
+    "EHEIM",
+    "EUKANUBA",
+    "Edgard & Cooper",
+    "Europet Bernina",
+    "Exo Terra",
+    "FIT+FUN",
+    "Felix",
+    "Ferplast",
+    "Flexi",
+    "Fluval",
+    "GOURMET",
+    "GRAU",
+    "GimCat",
+    "HAPPY CAT",
+    "HAPPY DOG",
+    "Hill's",
+    "JBL",
+    "JR Farm",
+    "JUWEL",
+    "KATTOVIT",
+    "KONG",
+    "Karlie",
+    "Kitty's Cuisine",
+    "Kurgo",
+    "LILY'S KITCHEN",
+    "LOOKS by Wolfgang Joop",
+    "Lucky Reptile",
+    "MAC's",
+    "MARINA",
+    "MOMENTS",
+    "MORE",
+    "Maxi Zoo",
+    "Miamor",
+    "MjAMjAM",
+    "Moser",
+    "MultiFit",
+    "Naturally Good",
+    "OLEWO",
+    "Oase",
+    "Orijen",
+    "PREMIERE",
+    "PRIME",
+    "PRO PLAN",
+    "Pedigree",
+    "Penn Plax",
+    "Pet Partner",
+    "PetBalance",
+    "PetSafe",
+    "Pontec",
+    "Quiko",
+    "REAL NATURE",
+    "RINTI",
+    "ROGZ",
+    "ROYAL CANIN",
+    "Rosi's",
+    "SELECT GOLD",
+    "SIMPLE SOLUTION",
+    "Savic",
+    "Sera",
+    "SureFlap",
+    "Söll",
+    "TAKE CARE",
+    "Terra Canis",
+    "Tetra",
+    "Trixie",
+    "Tropica",
+    "Trovet",
+    "Unique Koi",
+    "Velda",
+    "Versele-Laga",
+    "Vitakraft",
+    "WHIMZEES",
+    "WOLFSBLUT",
+    "Whiskas",
+    "ZooMed",
+    "animonda",
+    "bosch"
+  ],
+  "shippingClasses": [
+    "free",
+    "standard",
+    "heavy",
+    "click_collect"
+  ]
+}

@@ -1,0 +1,875 @@
+[
+  {
+    "id": "c-kot-karma-dla-kotow-karma-sucha",
+    "name": "Sucha karma dla kota",
+    "slug": "karma-sucha",
+    "path": "/c/kot/karma-dla-kotow/karma-sucha/",
+    "url": "https://www.maxizoo.pl/c/kot/karma-dla-kotow/karma-sucha/",
+    "depth": 3,
+    "parent": "/c/kot/karma-dla-kotow/"
+  },
+  {
+    "id": "c-pies-karma-dla-psow-karma-sucha",
+    "name": "Sucha karma dla psa",
+    "slug": "karma-sucha",
+    "path": "/c/pies/karma-dla-psow/karma-sucha/",
+    "url": "https://www.maxizoo.pl/c/pies/karma-dla-psow/karma-sucha/",
+    "depth": 3,
+    "parent": "/c/pies/karma-dla-psow/"
+  },
+  {
+    "id": "c-pies-karma-dla-psow-karma-mokra",
+    "name": "Mokra karma dla psa",
+    "slug": "karma-mokra",
+    "path": "/c/pies/karma-dla-psow/karma-mokra/",
+    "url": "https://www.maxizoo.pl/c/pies/karma-dla-psow/karma-mokra/",
+    "depth": 3,
+    "parent": "/c/pies/karma-dla-psow/"
+  },
+  {
+    "id": "c-kot-karma-dla-kotow-karma-mokra",
+    "name": "Mokra karma dla kota",
+    "slug": "karma-mokra",
+    "path": "/c/kot/karma-dla-kotow/karma-mokra/",
+    "url": "https://www.maxizoo.pl/c/kot/karma-dla-kotow/karma-mokra/",
+    "depth": 3,
+    "parent": "/c/kot/karma-dla-kotow/"
+  },
+  {
+    "id": "c-pies-karma-dla-psow-przekaski-i-napoje",
+    "name": "Przysmaki dla psa",
+    "slug": "przekaski-i-napoje",
+    "path": "/c/pies/karma-dla-psow/przekaski-i-napoje/",
+    "url": "https://www.maxizoo.pl/c/pies/karma-dla-psow/przekaski-i-napoje/",
+    "depth": 3,
+    "parent": "/c/pies/karma-dla-psow/"
+  },
+  {
+    "id": "c-kot-higiena-i-pielegnacja-zwirek-dla-kotow",
+    "name": "Żwirek i piasek dla kota",
+    "slug": "zwirek-dla-kotow",
+    "path": "/c/kot/higiena-i-pielegnacja/zwirek-dla-kotow/",
+    "url": "https://www.maxizoo.pl/c/kot/higiena-i-pielegnacja/zwirek-dla-kotow/",
+    "depth": 3,
+    "parent": "/c/kot/higiena-i-pielegnacja/"
+  },
+  {
+    "id": "c-pies-spacery-obroza-dla-psa",
+    "name": "obroży",
+    "slug": "obroza-dla-psa",
+    "path": "/c/pies/spacery/obroza-dla-psa/",
+    "url": "https://www.maxizoo.pl/c/pies/spacery/obroza-dla-psa/",
+    "depth": 3,
+    "parent": "/c/pies/spacery/"
+  },
+  {
+    "id": "c-akwarystyka-pielegnacja-i-higiena-pielegnacja-wody",
+    "name": "produktów do pielęgnacji",
+    "slug": "pielegnacja-wody",
+    "path": "/c/akwarystyka/pielegnacja-i-higiena/pielegnacja-wody/",
+    "url": "https://www.maxizoo.pl/c/akwarystyka/pielegnacja-i-higiena/pielegnacja-wody/",
+    "depth": 3,
+    "parent": "/c/akwarystyka/pielegnacja-i-higiena/"
+  },
+  {
+    "id": "c-pies-spacery-bezpieczenstwo-w-ciemnosci",
+    "name": "Bezpieczeństwo w ciemności",
+    "slug": "bezpieczenstwo-w-ciemnosci",
+    "path": "/c/pies/spacery/bezpieczenstwo-w-ciemnosci/",
+    "url": "https://www.maxizoo.pl/c/pies/spacery/bezpieczenstwo-w-ciemnosci/",
+    "depth": 3,
+    "parent": "/c/pies/spacery/"
+  },
+  {
+    "id": "c-pies-miejsca-do-spania-dla-psow-legowiska-dla-psow",
+    "name": "legowisk dla psów",
+    "slug": "legowiska-dla-psow",
+    "path": "/c/pies/miejsca-do-spania-dla-psow/legowiska-dla-psow/",
+    "url": "https://www.maxizoo.pl/c/pies/miejsca-do-spania-dla-psow/legowiska-dla-psow/",
+    "depth": 3,
+    "parent": "/c/pies/miejsca-do-spania-dla-psow/"
+  },
+  {
+    "id": "c-pies-zabawki-dla-psow-frisbee-i-zabawki-do-rzucania-dla-psow",
+    "name": "frisbee",
+    "slug": "frisbee-i-zabawki-do-rzucania-dla-psow",
+    "path": "/c/pies/zabawki-dla-psow/frisbee-i-zabawki-do-rzucania-dla-psow/",
+    "url": "https://www.maxizoo.pl/c/pies/zabawki-dla-psow/frisbee-i-zabawki-do-rzucania-dla-psow/",
+    "depth": 3,
+    "parent": "/c/pies/zabawki-dla-psow/"
+  },
+  {
+    "id": "c-pies-karma-dla-psow-suplementy-i-hodowla",
+    "name": "suplementy",
+    "slug": "suplementy-i-hodowla",
+    "path": "/c/pies/karma-dla-psow/suplementy-i-hodowla/",
+    "url": "https://www.maxizoo.pl/c/pies/karma-dla-psow/suplementy-i-hodowla/",
+    "depth": 3,
+    "parent": "/c/pies/karma-dla-psow/"
+  },
+  {
+    "id": "c-pies-karma-dla-psow-barf-karma-mrozona",
+    "name": "produkty BARF",
+    "slug": "barf-karma-mrozona",
+    "path": "/c/pies/karma-dla-psow/barf-karma-mrozona/",
+    "url": "https://www.maxizoo.pl/c/pies/karma-dla-psow/barf-karma-mrozona/",
+    "depth": 3,
+    "parent": "/c/pies/karma-dla-psow/"
+  },
+  {
+    "id": "c-pies-transport-i-bezpieczenstwo-transportery-i-klatki-transportowe",
+    "name": "transportu psa",
+    "slug": "transportery-i-klatki-transportowe",
+    "path": "/c/pies/transport-i-bezpieczenstwo/transportery-i-klatki-transportowe/",
+    "url": "https://www.maxizoo.pl/c/pies/transport-i-bezpieczenstwo/transportery-i-klatki-transportowe/",
+    "depth": 3,
+    "parent": "/c/pies/transport-i-bezpieczenstwo/"
+  },
+  {
+    "id": "c-pies-miejsca-do-spania-dla-psow-koce-dla-psow",
+    "name": "akcesoriów do miejsc",
+    "slug": "koce-dla-psow",
+    "path": "/c/pies/miejsca-do-spania-dla-psow/koce-dla-psow/",
+    "url": "https://www.maxizoo.pl/c/pies/miejsca-do-spania-dla-psow/koce-dla-psow/",
+    "depth": 3,
+    "parent": "/c/pies/miejsca-do-spania-dla-psow/"
+  },
+  {
+    "id": "c-kot-karma-dla-kotow-przekaski",
+    "name": "Przekąski",
+    "slug": "przekaski",
+    "path": "/c/kot/karma-dla-kotow/przekaski/",
+    "url": "https://www.maxizoo.pl/c/kot/karma-dla-kotow/przekaski/",
+    "depth": 3,
+    "parent": "/c/kot/karma-dla-kotow/"
+  },
+  {
+    "id": "c-kot-bezpieczenstwo-siatki-zabezpieczajace",
+    "name": "siatkę ochronną",
+    "slug": "siatki-zabezpieczajace",
+    "path": "/c/kot/bezpieczenstwo/siatki-zabezpieczajace/",
+    "url": "https://www.maxizoo.pl/c/kot/bezpieczenstwo/siatki-zabezpieczajace/",
+    "depth": 3,
+    "parent": "/c/kot/bezpieczenstwo/"
+  },
+  {
+    "id": "c-kot-sen-odpoczynek-lozka-kanapy",
+    "name": "legowisk dla kotów",
+    "slug": "lozka-kanapy",
+    "path": "/c/kot/sen-odpoczynek/lozka-kanapy/",
+    "url": "https://www.maxizoo.pl/c/kot/sen-odpoczynek/lozka-kanapy/",
+    "depth": 3,
+    "parent": "/c/kot/sen-odpoczynek/"
+  },
+  {
+    "id": "c-kot-sen-odpoczynek-jaskinie-dla-kotow",
+    "name": "jaskiń",
+    "slug": "jaskinie-dla-kotow",
+    "path": "/c/kot/sen-odpoczynek/jaskinie-dla-kotow/",
+    "url": "https://www.maxizoo.pl/c/kot/sen-odpoczynek/jaskinie-dla-kotow/",
+    "depth": 3,
+    "parent": "/c/kot/sen-odpoczynek/"
+  },
+  {
+    "id": "c-male-zwierzeta-karma-dla-malych-zwierzat-karma-podstawowa",
+    "name": "Karma podstawowa",
+    "slug": "karma-podstawowa",
+    "path": "/c/male-zwierzeta/karma-dla-malych-zwierzat/karma-podstawowa/",
+    "url": "https://www.maxizoo.pl/c/male-zwierzeta/karma-dla-malych-zwierzat/karma-podstawowa/",
+    "depth": 3,
+    "parent": "/c/male-zwierzeta/karma-dla-malych-zwierzat/"
+  },
+  {
+    "id": "c-male-zwierzeta-karma-dla-malych-zwierzat-przekaski",
+    "name": "Przekąski",
+    "slug": "przekaski",
+    "path": "/c/male-zwierzeta/karma-dla-malych-zwierzat/przekaski/",
+    "url": "https://www.maxizoo.pl/c/male-zwierzeta/karma-dla-malych-zwierzat/przekaski/",
+    "depth": 3,
+    "parent": "/c/male-zwierzeta/karma-dla-malych-zwierzat/"
+  },
+  {
+    "id": "c-male-zwierzeta-domki-dla-malych-zwierzat-sciolka-i-sloma",
+    "name": "Ściółka i słoma",
+    "slug": "sciolka-i-sloma",
+    "path": "/c/male-zwierzeta/domki-dla-malych-zwierzat/sciolka-i-sloma/",
+    "url": "https://www.maxizoo.pl/c/male-zwierzeta/domki-dla-malych-zwierzat/sciolka-i-sloma/",
+    "depth": 3,
+    "parent": "/c/male-zwierzeta/domki-dla-malych-zwierzat/"
+  },
+  {
+    "id": "c-ptaki-karma-dla-ptakow-karma-podstawowa",
+    "name": "Karma podstawowa",
+    "slug": "karma-podstawowa",
+    "path": "/c/ptaki/karma-dla-ptakow/karma-podstawowa/",
+    "url": "https://www.maxizoo.pl/c/ptaki/karma-dla-ptakow/karma-podstawowa/",
+    "depth": 3,
+    "parent": "/c/ptaki/karma-dla-ptakow/"
+  },
+  {
+    "id": "c-ptaki-karma-dla-ptakow-przekaski",
+    "name": "Przekąski",
+    "slug": "przekaski",
+    "path": "/c/ptaki/karma-dla-ptakow/przekaski/",
+    "url": "https://www.maxizoo.pl/c/ptaki/karma-dla-ptakow/przekaski/",
+    "depth": 3,
+    "parent": "/c/ptaki/karma-dla-ptakow/"
+  },
+  {
+    "id": "c-ptaki-karma-dla-ptakow-karma-uzupelniajaca",
+    "name": "Karma uzupełniająca",
+    "slug": "karma-uzupelniajaca",
+    "path": "/c/ptaki/karma-dla-ptakow/karma-uzupelniajaca/",
+    "url": "https://www.maxizoo.pl/c/ptaki/karma-dla-ptakow/karma-uzupelniajaca/",
+    "depth": 3,
+    "parent": "/c/ptaki/karma-dla-ptakow/"
+  },
+  {
+    "id": "c-akwarystyka-instalacja-i-dodatki-dno",
+    "name": "Dno",
+    "slug": "dno",
+    "path": "/c/akwarystyka/instalacja-i-dodatki/dno/",
+    "url": "https://www.maxizoo.pl/c/akwarystyka/instalacja-i-dodatki/dno/",
+    "depth": 3,
+    "parent": "/c/akwarystyka/instalacja-i-dodatki/"
+  },
+  {
+    "id": "c-terrarystyka-pokarm-dla-zwierzat-w-terrarium-suplementy-do-karmy",
+    "name": "Suplementy do karmy",
+    "slug": "suplementy-do-karmy",
+    "path": "/c/terrarystyka/pokarm-dla-zwierzat-w-terrarium/suplementy-do-karmy/",
+    "url": "https://www.maxizoo.pl/c/terrarystyka/pokarm-dla-zwierzat-w-terrarium/suplementy-do-karmy/",
+    "depth": 3,
+    "parent": "/c/terrarystyka/pokarm-dla-zwierzat-w-terrarium/"
+  },
+  {
+    "id": "c-terrarystyka-terraria-i-akcesoria-terraria",
+    "name": "Terraria",
+    "slug": "terraria",
+    "path": "/c/terrarystyka/terraria-i-akcesoria/terraria/",
+    "url": "https://www.maxizoo.pl/c/terrarystyka/terraria-i-akcesoria/terraria/",
+    "depth": 3,
+    "parent": "/c/terrarystyka/terraria-i-akcesoria/"
+  },
+  {
+    "id": "c-terrarystyka-terraria-i-akcesoria-oswietlenie",
+    "name": "Oświetlenie",
+    "slug": "oswietlenie",
+    "path": "/c/terrarystyka/terraria-i-akcesoria/oswietlenie/",
+    "url": "https://www.maxizoo.pl/c/terrarystyka/terraria-i-akcesoria/oswietlenie/",
+    "depth": 3,
+    "parent": "/c/terrarystyka/terraria-i-akcesoria/"
+  },
+  {
+    "id": "c-terrarystyka-instalacja-i-pielegnacja-dekoracja",
+    "name": "Dekoracja",
+    "slug": "dekoracja",
+    "path": "/c/terrarystyka/instalacja-i-pielegnacja/dekoracja/",
+    "url": "https://www.maxizoo.pl/c/terrarystyka/instalacja-i-pielegnacja/dekoracja/",
+    "depth": 3,
+    "parent": "/c/terrarystyka/instalacja-i-pielegnacja/"
+  },
+  {
+    "id": "c-terrarystyka-instalacja-i-pielegnacja-dno",
+    "name": "Dno",
+    "slug": "dno",
+    "path": "/c/terrarystyka/instalacja-i-pielegnacja/dno/",
+    "url": "https://www.maxizoo.pl/c/terrarystyka/instalacja-i-pielegnacja/dno/",
+    "depth": 3,
+    "parent": "/c/terrarystyka/instalacja-i-pielegnacja/"
+  },
+  {
+    "id": "c-ogrod-i-staw-dzikie-ptaki-karma-dla-dzikich-ptakow",
+    "name": "Wyświetl wszystko",
+    "slug": "karma-dla-dzikich-ptakow",
+    "path": "/c/ogrod-i-staw/dzikie-ptaki/karma-dla-dzikich-ptakow/",
+    "url": "https://www.maxizoo.pl/c/ogrod-i-staw/dzikie-ptaki/karma-dla-dzikich-ptakow/",
+    "depth": 3,
+    "parent": "/c/ogrod-i-staw/dzikie-ptaki/"
+  },
+  {
+    "id": "c-diety-vet-pies-hipoalergiczny",
+    "name": "Hipoalergiczna",
+    "slug": "hipoalergiczny",
+    "path": "/c/diety-vet/pies/hipoalergiczny/",
+    "url": "https://www.maxizoo.pl/c/diety-vet/pies/hipoalergiczny/",
+    "depth": 3,
+    "parent": "/c/diety-vet/pies/"
+  },
+  {
+    "id": "c-diety-vet-pies-lekkostrawny",
+    "name": "Lekkostrawna",
+    "slug": "lekkostrawny",
+    "path": "/c/diety-vet/pies/lekkostrawny/",
+    "url": "https://www.maxizoo.pl/c/diety-vet/pies/lekkostrawny/",
+    "depth": 3,
+    "parent": "/c/diety-vet/pies/"
+  },
+  {
+    "id": "c-diety-vet-pies-nadwaga",
+    "name": "Nadwaga",
+    "slug": "nadwaga",
+    "path": "/c/diety-vet/pies/nadwaga/",
+    "url": "https://www.maxizoo.pl/c/diety-vet/pies/nadwaga/",
+    "depth": 3,
+    "parent": "/c/diety-vet/pies/"
+  },
+  {
+    "id": "c-diety-vet-pies-dieta-nerkowa",
+    "name": "Dieta nerkowa",
+    "slug": "dieta-nerkowa",
+    "path": "/c/diety-vet/pies/dieta-nerkowa/",
+    "url": "https://www.maxizoo.pl/c/diety-vet/pies/dieta-nerkowa/",
+    "depth": 3,
+    "parent": "/c/diety-vet/pies/"
+  },
+  {
+    "id": "c-diety-vet-pies-serce-watroba",
+    "name": "Serce i wątroba",
+    "slug": "serce-watroba",
+    "path": "/c/diety-vet/pies/serce-watroba/",
+    "url": "https://www.maxizoo.pl/c/diety-vet/pies/serce-watroba/",
+    "depth": 3,
+    "parent": "/c/diety-vet/pies/"
+  },
+  {
+    "id": "c-diety-vet-kot-dieta-nerkowa",
+    "name": "Dieta nerkowa",
+    "slug": "dieta-nerkowa",
+    "path": "/c/diety-vet/kot/dieta-nerkowa/",
+    "url": "https://www.maxizoo.pl/c/diety-vet/kot/dieta-nerkowa/",
+    "depth": 3,
+    "parent": "/c/diety-vet/kot/"
+  },
+  {
+    "id": "c-diety-vet-kot-hipoalergiczny",
+    "name": "Hipoalergiczna",
+    "slug": "hipoalergiczny",
+    "path": "/c/diety-vet/kot/hipoalergiczny/",
+    "url": "https://www.maxizoo.pl/c/diety-vet/kot/hipoalergiczny/",
+    "depth": 3,
+    "parent": "/c/diety-vet/kot/"
+  },
+  {
+    "id": "c-diety-vet-kot-urinary",
+    "name": "Urinary",
+    "slug": "urinary",
+    "path": "/c/diety-vet/kot/urinary/",
+    "url": "https://www.maxizoo.pl/c/diety-vet/kot/urinary/",
+    "depth": 3,
+    "parent": "/c/diety-vet/kot/"
+  },
+  {
+    "id": "c-diety-vet-kot-lekkostrawny",
+    "name": "Lekkostrawna",
+    "slug": "lekkostrawny",
+    "path": "/c/diety-vet/kot/lekkostrawny/",
+    "url": "https://www.maxizoo.pl/c/diety-vet/kot/lekkostrawny/",
+    "depth": 3,
+    "parent": "/c/diety-vet/kot/"
+  },
+  {
+    "id": "c-diety-vet-kot-nadwaga",
+    "name": "Nadwaga",
+    "slug": "nadwaga",
+    "path": "/c/diety-vet/kot/nadwaga/",
+    "url": "https://www.maxizoo.pl/c/diety-vet/kot/nadwaga/",
+    "depth": 3,
+    "parent": "/c/diety-vet/kot/"
+  },
+  {
+    "id": "c-diety-vet-kot-dieta-rekonwalescencyjna",
+    "name": "Dieta rekonwalescencyjna",
+    "slug": "dieta-rekonwalescencyjna",
+    "path": "/c/diety-vet/kot/dieta-rekonwalescencyjna/",
+    "url": "https://www.maxizoo.pl/c/diety-vet/kot/dieta-rekonwalescencyjna/",
+    "depth": 3,
+    "parent": "/c/diety-vet/kot/"
+  },
+  {
+    "id": "c-pies-pielegnacja-i-higiena-srodki-odstraszajace-pchly-i-kleszcze",
+    "name": "Ochrona przed kleszczami i pchłami",
+    "slug": "srodki-odstraszajace-pchly-i-kleszcze",
+    "path": "/c/pies/pielegnacja-i-higiena/srodki-odstraszajace-pchly-i-kleszcze/",
+    "url": "https://www.maxizoo.pl/c/pies/pielegnacja-i-higiena/srodki-odstraszajace-pchly-i-kleszcze/",
+    "depth": 3,
+    "parent": "/c/pies/pielegnacja-i-higiena/"
+  },
+  {
+    "id": "c-pies-pielegnacja-i-higiena-pielegnacja-zebow",
+    "name": "Pielęgnacja zębów",
+    "slug": "pielegnacja-zebow",
+    "path": "/c/pies/pielegnacja-i-higiena/pielegnacja-zebow/",
+    "url": "https://www.maxizoo.pl/c/pies/pielegnacja-i-higiena/pielegnacja-zebow/",
+    "depth": 3,
+    "parent": "/c/pies/pielegnacja-i-higiena/"
+  },
+  {
+    "id": "c-kot-higiena-i-pielegnacja-pasozyty-ochrona-przed-kleszczami",
+    "name": "Ochrona przed kleszczami i pchłami",
+    "slug": "pasozyty-ochrona-przed-kleszczami",
+    "path": "/c/kot/higiena-i-pielegnacja/pasozyty-ochrona-przed-kleszczami/",
+    "url": "https://www.maxizoo.pl/c/kot/higiena-i-pielegnacja/pasozyty-ochrona-przed-kleszczami/",
+    "depth": 3,
+    "parent": "/c/kot/higiena-i-pielegnacja/"
+  },
+  {
+    "id": "c-kot-higiena-i-pielegnacja-pielegnacja-zebow",
+    "name": "Pielęgnacja zębów",
+    "slug": "pielegnacja-zebow",
+    "path": "/c/kot/higiena-i-pielegnacja/pielegnacja-zebow/",
+    "url": "https://www.maxizoo.pl/c/kot/higiena-i-pielegnacja/pielegnacja-zebow/",
+    "depth": 3,
+    "parent": "/c/kot/higiena-i-pielegnacja/"
+  },
+  {
+    "id": "c-kot-karma-dla-kotow-suplementy",
+    "name": "Suplementy diety",
+    "slug": "suplementy",
+    "path": "/c/kot/karma-dla-kotow/suplementy/",
+    "url": "https://www.maxizoo.pl/c/kot/karma-dla-kotow/suplementy/",
+    "depth": 3,
+    "parent": "/c/kot/karma-dla-kotow/"
+  },
+  {
+    "id": "c-pies-transport-i-bezpieczenstwo",
+    "name": "Niezbędnik na letni urlop z psem",
+    "slug": "transport-i-bezpieczenstwo",
+    "path": "/c/pies/transport-i-bezpieczenstwo/",
+    "url": "https://www.maxizoo.pl/c/pies/transport-i-bezpieczenstwo/",
+    "depth": 2,
+    "parent": "/c/pies/"
+  },
+  {
+    "id": "c-kot-w-drodze",
+    "name": "Mrucząco udane wakacje",
+    "slug": "w-drodze",
+    "path": "/c/kot/w-drodze/",
+    "url": "https://www.maxizoo.pl/c/kot/w-drodze/",
+    "depth": 2,
+    "parent": "/c/kot/"
+  },
+  {
+    "id": "c-kot-bezpieczenstwo",
+    "name": "Niezbędniki na świeże powietrze",
+    "slug": "bezpieczenstwo",
+    "path": "/c/kot/bezpieczenstwo/",
+    "url": "https://www.maxizoo.pl/c/kot/bezpieczenstwo/",
+    "depth": 2,
+    "parent": "/c/kot/"
+  },
+  {
+    "id": "c-marki-ekskluzywne",
+    "name": "Marki od Maxi Zoo",
+    "slug": "ekskluzywne",
+    "path": "/c/marki/ekskluzywne/",
+    "url": "https://www.maxizoo.pl/c/marki/ekskluzywne/",
+    "depth": 2,
+    "parent": "/c/marki/"
+  },
+  {
+    "id": "c-marki-multifit",
+    "name": "MultiFit",
+    "slug": "multifit",
+    "path": "/c/marki/multifit/",
+    "url": "https://www.maxizoo.pl/c/marki/multifit/",
+    "depth": 2,
+    "parent": "/c/marki/"
+  },
+  {
+    "id": "c-marki-real-nature",
+    "name": "REAL NATURE",
+    "slug": "real-nature",
+    "path": "/c/marki/real-nature/",
+    "url": "https://www.maxizoo.pl/c/marki/real-nature/",
+    "depth": 2,
+    "parent": "/c/marki/"
+  },
+  {
+    "id": "c-pies-spacery",
+    "name": "Spacer z psem",
+    "slug": "spacery",
+    "path": "/c/pies/spacery/",
+    "url": "https://www.maxizoo.pl/c/pies/spacery/",
+    "depth": 2,
+    "parent": "/c/pies/"
+  },
+  {
+    "id": "c-pies-szczenieta",
+    "name": "Wszystko dla szczeniąt",
+    "slug": "szczenieta",
+    "path": "/c/pies/szczenieta/",
+    "url": "https://www.maxizoo.pl/c/pies/szczenieta/",
+    "depth": 2,
+    "parent": "/c/pies/"
+  },
+  {
+    "id": "c-pies-zabawki-dla-psow",
+    "name": "Zabawki",
+    "slug": "zabawki-dla-psow",
+    "path": "/c/pies/zabawki-dla-psow/",
+    "url": "https://www.maxizoo.pl/c/pies/zabawki-dla-psow/",
+    "depth": 2,
+    "parent": "/c/pies/"
+  },
+  {
+    "id": "c-pies-pielegnacja-i-higiena",
+    "name": "Pielęgnacja i higiena",
+    "slug": "pielegnacja-i-higiena",
+    "path": "/c/pies/pielegnacja-i-higiena/",
+    "url": "https://www.maxizoo.pl/c/pies/pielegnacja-i-higiena/",
+    "depth": 2,
+    "parent": "/c/pies/"
+  },
+  {
+    "id": "c-pies-miejsca-do-spania-dla-psow",
+    "name": "Przytulne legowiska",
+    "slug": "miejsca-do-spania-dla-psow",
+    "path": "/c/pies/miejsca-do-spania-dla-psow/",
+    "url": "https://www.maxizoo.pl/c/pies/miejsca-do-spania-dla-psow/",
+    "depth": 2,
+    "parent": "/c/pies/"
+  },
+  {
+    "id": "c-pies-odziez-dla-psow",
+    "name": "Ciepłe ubranka",
+    "slug": "odziez-dla-psow",
+    "path": "/c/pies/odziez-dla-psow/",
+    "url": "https://www.maxizoo.pl/c/pies/odziez-dla-psow/",
+    "depth": 2,
+    "parent": "/c/pies/"
+  },
+  {
+    "id": "c-diety-vet-pies",
+    "name": "Zdrowie psa",
+    "slug": "pies",
+    "path": "/c/diety-vet/pies/",
+    "url": "https://www.maxizoo.pl/c/diety-vet/pies/",
+    "depth": 2,
+    "parent": "/c/diety-vet/"
+  },
+  {
+    "id": "c-pies-karma-dla-psow",
+    "name": "wysokiej jakości karmą,",
+    "slug": "karma-dla-psow",
+    "path": "/c/pies/karma-dla-psow/",
+    "url": "https://www.maxizoo.pl/c/pies/karma-dla-psow/",
+    "depth": 2,
+    "parent": "/c/pies/"
+  },
+  {
+    "id": "c-kot-kocieta",
+    "name": "Wszystko dla kociąt",
+    "slug": "kocieta",
+    "path": "/c/kot/kocieta/",
+    "url": "https://www.maxizoo.pl/c/kot/kocieta/",
+    "depth": 2,
+    "parent": "/c/kot/"
+  },
+  {
+    "id": "c-kot-zabawki-dla-kotow",
+    "name": "Zabawki",
+    "slug": "zabawki-dla-kotow",
+    "path": "/c/kot/zabawki-dla-kotow/",
+    "url": "https://www.maxizoo.pl/c/kot/zabawki-dla-kotow/",
+    "depth": 2,
+    "parent": "/c/kot/"
+  },
+  {
+    "id": "c-kot-drapaki",
+    "name": "Drapaki dla kota",
+    "slug": "drapaki",
+    "path": "/c/kot/drapaki/",
+    "url": "https://www.maxizoo.pl/c/kot/drapaki/",
+    "depth": 2,
+    "parent": "/c/kot/"
+  },
+  {
+    "id": "c-kot-sen-odpoczynek",
+    "name": "Miejsca do spania",
+    "slug": "sen-odpoczynek",
+    "path": "/c/kot/sen-odpoczynek/",
+    "url": "https://www.maxizoo.pl/c/kot/sen-odpoczynek/",
+    "depth": 2,
+    "parent": "/c/kot/"
+  },
+  {
+    "id": "c-kot-higiena-i-pielegnacja",
+    "name": "Pielęgnacja futra",
+    "slug": "higiena-i-pielegnacja",
+    "path": "/c/kot/higiena-i-pielegnacja/",
+    "url": "https://www.maxizoo.pl/c/kot/higiena-i-pielegnacja/",
+    "depth": 2,
+    "parent": "/c/kot/"
+  },
+  {
+    "id": "c-kot-karma-dla-kotow",
+    "name": "Starsze koty",
+    "slug": "karma-dla-kotow",
+    "path": "/c/kot/karma-dla-kotow/",
+    "url": "https://www.maxizoo.pl/c/kot/karma-dla-kotow/",
+    "depth": 2,
+    "parent": "/c/kot/"
+  },
+  {
+    "id": "c-diety-vet-kot",
+    "name": "Zdrowie kota",
+    "slug": "kot",
+    "path": "/c/diety-vet/kot/",
+    "url": "https://www.maxizoo.pl/c/diety-vet/kot/",
+    "depth": 2,
+    "parent": "/c/diety-vet/"
+  },
+  {
+    "id": "c-male-zwierzeta-pielegnacja-i-higiena",
+    "name": "Pielęgnacja i higiena",
+    "slug": "pielegnacja-i-higiena",
+    "path": "/c/male-zwierzeta/pielegnacja-i-higiena/",
+    "url": "https://www.maxizoo.pl/c/male-zwierzeta/pielegnacja-i-higiena/",
+    "depth": 2,
+    "parent": "/c/male-zwierzeta/"
+  },
+  {
+    "id": "c-male-zwierzeta-domki-dla-malych-zwierzat",
+    "name": "Domki",
+    "slug": "domki-dla-malych-zwierzat",
+    "path": "/c/male-zwierzeta/domki-dla-malych-zwierzat/",
+    "url": "https://www.maxizoo.pl/c/male-zwierzeta/domki-dla-malych-zwierzat/",
+    "depth": 2,
+    "parent": "/c/male-zwierzeta/"
+  },
+  {
+    "id": "c-male-zwierzeta-zabawka-dla-malych-zwierzat",
+    "name": "Zabawki",
+    "slug": "zabawka-dla-malych-zwierzat",
+    "path": "/c/male-zwierzeta/zabawka-dla-malych-zwierzat/",
+    "url": "https://www.maxizoo.pl/c/male-zwierzeta/zabawka-dla-malych-zwierzat/",
+    "depth": 2,
+    "parent": "/c/male-zwierzeta/"
+  },
+  {
+    "id": "c-ptaki-pielegnacja-i-higiena",
+    "name": "Pielęgnacja i higiena",
+    "slug": "pielegnacja-i-higiena",
+    "path": "/c/ptaki/pielegnacja-i-higiena/",
+    "url": "https://www.maxizoo.pl/c/ptaki/pielegnacja-i-higiena/",
+    "depth": 2,
+    "parent": "/c/ptaki/"
+  },
+  {
+    "id": "c-ptaki-domki-dla-ptakow",
+    "name": "Domki",
+    "slug": "domki-dla-ptakow",
+    "path": "/c/ptaki/domki-dla-ptakow/",
+    "url": "https://www.maxizoo.pl/c/ptaki/domki-dla-ptakow/",
+    "depth": 2,
+    "parent": "/c/ptaki/"
+  },
+  {
+    "id": "c-ptaki-zabawki-dla-ptakow",
+    "name": "Zabawki",
+    "slug": "zabawki-dla-ptakow",
+    "path": "/c/ptaki/zabawki-dla-ptakow/",
+    "url": "https://www.maxizoo.pl/c/ptaki/zabawki-dla-ptakow/",
+    "depth": 2,
+    "parent": "/c/ptaki/"
+  },
+  {
+    "id": "c-akwarystyka-karma-dla-ryb",
+    "name": "Karma",
+    "slug": "karma-dla-ryb",
+    "path": "/c/akwarystyka/karma-dla-ryb/",
+    "url": "https://www.maxizoo.pl/c/akwarystyka/karma-dla-ryb/",
+    "depth": 2,
+    "parent": "/c/akwarystyka/"
+  },
+  {
+    "id": "c-akwarystyka-akcesoria",
+    "name": "Akcesoria",
+    "slug": "akcesoria",
+    "path": "/c/akwarystyka/akcesoria/",
+    "url": "https://www.maxizoo.pl/c/akwarystyka/akcesoria/",
+    "depth": 2,
+    "parent": "/c/akwarystyka/"
+  },
+  {
+    "id": "c-akwarystyka-akwaria",
+    "name": "Akwaria",
+    "slug": "akwaria",
+    "path": "/c/akwarystyka/akwaria/",
+    "url": "https://www.maxizoo.pl/c/akwarystyka/akwaria/",
+    "depth": 2,
+    "parent": "/c/akwarystyka/"
+  },
+  {
+    "id": "c-akwarystyka-instalacja-i-dodatki",
+    "name": "Dodatki",
+    "slug": "instalacja-i-dodatki",
+    "path": "/c/akwarystyka/instalacja-i-dodatki/",
+    "url": "https://www.maxizoo.pl/c/akwarystyka/instalacja-i-dodatki/",
+    "depth": 2,
+    "parent": "/c/akwarystyka/"
+  },
+  {
+    "id": "c-akwarystyka-pielegnacja-i-higiena",
+    "name": "Pielegnacja & Higiena",
+    "slug": "pielegnacja-i-higiena",
+    "path": "/c/akwarystyka/pielegnacja-i-higiena/",
+    "url": "https://www.maxizoo.pl/c/akwarystyka/pielegnacja-i-higiena/",
+    "depth": 2,
+    "parent": "/c/akwarystyka/"
+  },
+  {
+    "id": "c-terrarystyka-pokarm-dla-zwierzat-w-terrarium",
+    "name": "Pokarm",
+    "slug": "pokarm-dla-zwierzat-w-terrarium",
+    "path": "/c/terrarystyka/pokarm-dla-zwierzat-w-terrarium/",
+    "url": "https://www.maxizoo.pl/c/terrarystyka/pokarm-dla-zwierzat-w-terrarium/",
+    "depth": 2,
+    "parent": "/c/terrarystyka/"
+  },
+  {
+    "id": "c-terrarystyka-instalacja-i-pielegnacja",
+    "name": "Wyświetl wszystko",
+    "slug": "instalacja-i-pielegnacja",
+    "path": "/c/terrarystyka/instalacja-i-pielegnacja/",
+    "url": "https://www.maxizoo.pl/c/terrarystyka/instalacja-i-pielegnacja/",
+    "depth": 2,
+    "parent": "/c/terrarystyka/"
+  },
+  {
+    "id": "c-terrarystyka-terraria-i-akcesoria",
+    "name": "Wyświetl wszystko",
+    "slug": "terraria-i-akcesoria",
+    "path": "/c/terrarystyka/terraria-i-akcesoria/",
+    "url": "https://www.maxizoo.pl/c/terrarystyka/terraria-i-akcesoria/",
+    "depth": 2,
+    "parent": "/c/terrarystyka/"
+  },
+  {
+    "id": "c-ogrod-i-staw-kury-i-gospodarstwo-rolne",
+    "name": "Kury i gospodarstwo",
+    "slug": "kury-i-gospodarstwo-rolne",
+    "path": "/c/ogrod-i-staw/kury-i-gospodarstwo-rolne/",
+    "url": "https://www.maxizoo.pl/c/ogrod-i-staw/kury-i-gospodarstwo-rolne/",
+    "depth": 2,
+    "parent": "/c/ogrod-i-staw/"
+  },
+  {
+    "id": "c-ogrod-i-staw-dzikie-ptaki",
+    "name": "Dzikie Ptaki",
+    "slug": "dzikie-ptaki",
+    "path": "/c/ogrod-i-staw/dzikie-ptaki/",
+    "url": "https://www.maxizoo.pl/c/ogrod-i-staw/dzikie-ptaki/",
+    "depth": 2,
+    "parent": "/c/ogrod-i-staw/"
+  },
+  {
+    "id": "c-ogrod-i-staw-dzikie-zwierzeta",
+    "name": "Dzikie zwierzęta",
+    "slug": "dzikie-zwierzeta",
+    "path": "/c/ogrod-i-staw/dzikie-zwierzeta/",
+    "url": "https://www.maxizoo.pl/c/ogrod-i-staw/dzikie-zwierzeta/",
+    "depth": 2,
+    "parent": "/c/ogrod-i-staw/"
+  },
+  {
+    "id": "c-ogrod-i-staw-pokarm-dla-ryb-stawowych",
+    "name": "Pokarm dla ryb stawowych",
+    "slug": "pokarm-dla-ryb-stawowych",
+    "path": "/c/ogrod-i-staw/pokarm-dla-ryb-stawowych/",
+    "url": "https://www.maxizoo.pl/c/ogrod-i-staw/pokarm-dla-ryb-stawowych/",
+    "depth": 2,
+    "parent": "/c/ogrod-i-staw/"
+  },
+  {
+    "id": "c-ogrod-i-staw-pielegnacja-stawu",
+    "name": "Pielęgnacja stawu",
+    "slug": "pielegnacja-stawu",
+    "path": "/c/ogrod-i-staw/pielegnacja-stawu/",
+    "url": "https://www.maxizoo.pl/c/ogrod-i-staw/pielegnacja-stawu/",
+    "depth": 2,
+    "parent": "/c/ogrod-i-staw/"
+  },
+  {
+    "id": "c-ogrod-i-staw-urzadzenia-i-akcesoria-do-stawow-i-oczek-wodnych",
+    "name": "Akcesoria do stawów",
+    "slug": "urzadzenia-i-akcesoria-do-stawow-i-oczek-wodnych",
+    "path": "/c/ogrod-i-staw/urzadzenia-i-akcesoria-do-stawow-i-oczek-wodnych/",
+    "url": "https://www.maxizoo.pl/c/ogrod-i-staw/urzadzenia-i-akcesoria-do-stawow-i-oczek-wodnych/",
+    "depth": 2,
+    "parent": "/c/ogrod-i-staw/"
+  },
+  {
+    "id": "c-pies",
+    "name": "Pies",
+    "slug": "pies",
+    "path": "/c/pies/",
+    "url": "https://www.maxizoo.pl/c/pies/",
+    "depth": 1,
+    "parent": null
+  },
+  {
+    "id": "c-kot",
+    "name": "Kot",
+    "slug": "kot",
+    "path": "/c/kot/",
+    "url": "https://www.maxizoo.pl/c/kot/",
+    "depth": 1,
+    "parent": null
+  },
+  {
+    "id": "c-male-zwierzeta",
+    "name": "Małe zwierzęta",
+    "slug": "male-zwierzeta",
+    "path": "/c/male-zwierzeta/",
+    "url": "https://www.maxizoo.pl/c/male-zwierzeta/",
+    "depth": 1,
+    "parent": null
+  },
+  {
+    "id": "c-ptaki",
+    "name": "Ptaki",
+    "slug": "ptaki",
+    "path": "/c/ptaki/",
+    "url": "https://www.maxizoo.pl/c/ptaki/",
+    "depth": 1,
+    "parent": null
+  },
+  {
+    "id": "c-akwarystyka",
+    "name": "Akwarystyka",
+    "slug": "akwarystyka",
+    "path": "/c/akwarystyka/",
+    "url": "https://www.maxizoo.pl/c/akwarystyka/",
+    "depth": 1,
+    "parent": null
+  },
+  {
+    "id": "c-terrarystyka",
+    "name": "Terrarystyka",
+    "slug": "terrarystyka",
+    "path": "/c/terrarystyka/",
+    "url": "https://www.maxizoo.pl/c/terrarystyka/",
+    "depth": 1,
+    "parent": null
+  },
+  {
+    "id": "c-ogrod-i-staw",
+    "name": "Ogród i staw",
+    "slug": "ogrod-i-staw",
+    "path": "/c/ogrod-i-staw/",
+    "url": "https://www.maxizoo.pl/c/ogrod-i-staw/",
+    "depth": 1,
+    "parent": null
+  },
+  {
+    "id": "c-diety-vet",
+    "name": "VET",
+    "slug": "diety-vet",
+    "path": "/c/diety-vet/",
+    "url": "https://www.maxizoo.pl/c/diety-vet/",
+    "depth": 1,
+    "parent": null
+  }
+]
